@@ -1,0 +1,19 @@
+# Second Brain
+
+# Obsidian
+.obsidian/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Node
+node_modules/
+
+# Logs
+*.log

@@ -410,84 +410,23 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Brain Preview */}
-          <div className="relative rounded-3xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 p-8 mb-12 overflow-hidden">
-            {/* Decorative nodes */}
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-10 left-10 w-32 h-32 rounded-full border border-violet-500/50" />
-              <div className="absolute top-20 left-20 w-24 h-24 rounded-full border border-blue-500/50" />
-              <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full border border-emerald-500/50" />
-              <div className="absolute bottom-20 right-20 w-28 h-28 rounded-full border border-amber-500/50" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border border-pink-500/50" />
+          {/* Brain Preview - Video Demo */}
+          <div className="relative rounded-3xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 p-4 mb-12 overflow-hidden">
+            <div className="relative rounded-2xl overflow-hidden bg-slate-900/80 border border-slate-700/50">
+              <iframe
+                src="https://drive.google.com/file/d/1ExMLIZxhqv1SQLkftNKaijmVL6Y3FwCp/preview"
+                width="100%"
+                height="500"
+                allow="autoplay"
+                allowFullScreen
+                className="w-full aspect-video"
+                title="Brain Interface Demo"
+              />
             </div>
-
-            <div className="relative z-10 grid md:grid-cols-2 gap-8">
-              {/* Left - Features */}
-              <div className="space-y-6">
-                <h3 className="text-2xl font-bold text-white font-heading">Interfaz de Nodos</h3>
-                <div className="space-y-4">
-                  {[
-                    { title: "Auto-Actualizable", desc: "Los nodos se actualizan en tiempo real cuando cambian tus notas", icon: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" },
-                    { title: "Personalizable", desc: "Arrastra, conecta y configura nodos segun tu flujo de trabajo", icon: "M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" },
-                    { title: "Conectado", desc: "Cada nodo enlaza con otros creando un mapa de conocimiento", icon: "M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" },
-                    { title: "Tareas Activas", desc: "Gestiona tareas pendientes y sigue el progreso visualmente", icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" },
-                  ].map((feature, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={feature.icon} />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-white font-body">{feature.title}</div>
-                        <div className="text-xs text-slate-400 font-body">{feature.desc}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right - Visual Preview */}
-              <div className="relative">
-                <div className="aspect-square rounded-2xl bg-slate-900/80 border border-slate-700/50 p-6 flex items-center justify-center">
-                  {/* Central Node */}
-                  <div className="relative">
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/25">
-                      <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                      </svg>
-                    </div>
-                    {/* Orbiting Nodes */}
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-violet-500/80 flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-blue-500/80 flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                      </svg>
-                    </div>
-                    <div className="absolute top-1/2 -left-12 -translate-y-1/2 w-12 h-12 rounded-full bg-emerald-500/80 flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                      </svg>
-                    </div>
-                    <div className="absolute top-1/2 -right-12 -translate-y-1/2 w-12 h-12 rounded-full bg-pink-500/80 flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    {/* Connection Lines */}
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ margin: "-32px" }}>
-                      <line x1="50%" y1="0" x2="50%" y2="25%" stroke="rgba(139,92,246,0.5)" strokeWidth="2" strokeDasharray="4 4" />
-                      <line x1="50%" y1="75%" x2="50%" y2="100%" stroke="rgba(59,130,246,0.5)" strokeWidth="2" strokeDasharray="4 4" />
-                      <line x1="0" y1="50%" x2="25%" y2="50%" stroke="rgba(34,197,94,0.5)" strokeWidth="2" strokeDasharray="4 4" />
-                      <line x1="75%" y1="50%" x2="100%" y2="50%" stroke="rgba(236,72,153,0.5)" strokeWidth="2" strokeDasharray="4 4" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-slate-400 font-body">
+                <span className="text-amber-400 font-medium">Prototipo en desarrollo</span> - Actualmente funciona via terminal. Asi se veria la interfaz visual en el futuro.
+              </p>
             </div>
           </div>
 

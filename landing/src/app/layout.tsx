@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { Poppins, Open_Sans } from "next/font/google";
+import { Poppins, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const poppins = Poppins({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const openSans = Open_Sans({
-  variable: "--font-body",
-  subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const jetbrains = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
 export const metadata: Metadata = {
-  title: "Second Brain - Tu Hub Maestro de Conocimiento",
-  description: "Un vault de Obsidian que funciona como centro de control para todos tus otros vaults. Auto-update con GitHub Actions.",
+  title: "Second Brain | Tu Hub Maestro de Conocimiento",
+  description: "Metodologia PACE para organizar tu conocimiento. Vault de Obsidian con auto-update, GitHub Actions y chatbot AI.",
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="dark">
       <body
-        className={`${poppins.variable} ${openSans.variable} font-body antialiased bg-background text-foreground`}
+        className={`${poppins.variable} ${jetbrains.variable} antialiased`}
       >
         {children}
       </body>

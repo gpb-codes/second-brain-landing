@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Chatbot from "../components/Chatbot";
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -16,7 +17,6 @@ export default function Home() {
     { name: "Learning-Vault", desc: "Cursos, Tutoriales, Recursos Educativos", files: 12, color: "#22C55E", icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" },
     { name: "Finanzas-Vault", desc: "Presupuestos, Inversiones, Ahorro", files: 8, color: "#F59E0B", icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
     { name: "Salud-Vault", desc: "Fitness, Nutricion, Bienestar", files: 10, color: "#EC4899", icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" },
-    { name: "Productividad-Vault", desc: "GTD, Herramientas, Sistemas", files: 12, color: "#06B6D4", icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" },
   ];
 
   const features = [
@@ -102,11 +102,12 @@ export default function Home() {
           </div>
 
           {/* Stats */}
-          <div className={`grid grid-cols-3 gap-8 mt-20 max-w-2xl mx-auto transition-all duration-1000 delay-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+          <div className={`grid grid-cols-4 gap-6 mt-20 max-w-3xl mx-auto transition-all duration-1000 delay-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
             {[
-              { value: "6+", label: "Vaults Conectados", color: "text-violet-400" },
-              { value: "32", label: "Archivos Index", color: "text-blue-400" },
+              { value: "5", label: "Vaults Demo", color: "text-violet-400" },
+              { value: "15", label: "Scripts", color: "text-blue-400" },
               { value: "Auto", label: "GitHub Sync", color: "text-emerald-400" },
+              { value: "Free", label: "MIT License", color: "text-amber-400" },
             ].map((stat, i) => (
               <div key={i} className="p-6 text-center rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
                 <div className={`text-3xl font-bold mb-1 font-heading ${stat.color}`}>{stat.value}</div>
@@ -525,6 +526,84 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Scripts Section */}
+      <section id="scripts" className="py-32 relative">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 font-heading">
+              <span className="text-white">Scripts </span>
+              <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">Disponibles</span>
+            </h2>
+            <p className="text-xl max-w-2xl mx-auto text-slate-400 font-body">
+              Herramientas PowerShell y Python para automatizar tu vault.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              { name: "second-brain.ps1", lang: "PowerShell", desc: "Panel de control interactivo", color: "#3B82F6" },
+              { name: "gmail-imap.py", lang: "Python", desc: "Client email IMAP", color: "#22C55E" },
+              { name: "dashboard-stats.ps1", lang: "PowerShell", desc: "Metricas del vault", color: "#8B5CF6" },
+              { name: "backup-vaults.ps1", lang: "PowerShell", desc: "Backup con timestamp", color: "#F59E0B" },
+              { name: "export-vault.ps1", lang: "PowerShell", desc: "Exportar a HTML", color: "#EC4899" },
+              { name: "search-vaults.ps1", lang: "PowerShell", desc: "Busqueda full-text", color: "#06B6D4" },
+              { name: "update-index.ps1", lang: "PowerShell", desc: "Auto-actualizar indices", color: "#22C55E" },
+              { name: "configure-repo.ps1", lang: "PowerShell", desc: "Configurar repositorio", color: "#3B82F6" },
+              { name: "qr-mobile-sync.py", lang: "Python", desc: "QR codes para movil", color: "#8B5CF6" },
+              { name: "setup-wizard.ps1", lang: "PowerShell", desc: "Asistente de configuracion", color: "#F59E0B" },
+            ].map((script, i) => (
+              <div key={i} className="p-4 rounded-xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 cursor-pointer flex items-center gap-4">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${script.color}20` }}>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke={script.color}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-white font-body">{script.name}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: `${script.color}20`, color: script.color }}>{script.lang}</span>
+                  </div>
+                  <div className="text-xs text-slate-400 font-body">{script.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section id="testimonials" className="py-32 relative bg-slate-900/50">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 font-heading">
+              <span className="text-white">Lo que dicen </span>
+              <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">los usuarios</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { name: "Dev User", role: "Desarrollador", text: "La metodologia PACE cambio la forma en que organizo mis proyectos. Todo esta conectado y es facil de encontrar.", color: "#8B5CF6" },
+              { name: "Designer", role: "Disenadora", text: "Los vaults de demo me dieron una estructura perfecta para empezar. El install.bat es super facil de usar.", color: "#3B82F6" },
+              { name: "Freelancer", role: "Freelancer", text: "Tener 5 vaults organizados con PACE me ahorra horas de busqueda. GitHub sync funciona perfecto.", color: "#22C55E" },
+            ].map((testimonial, i) => (
+              <div key={i} className="p-6 rounded-2xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${testimonial.color}20` }}>
+                    <span className="text-sm font-bold" style={{ color: testimonial.color }}>{testimonial.name[0]}</span>
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-white font-body">{testimonial.name}</div>
+                    <div className="text-xs text-slate-400 font-body">{testimonial.role}</div>
+                  </div>
+                </div>
+                <p className="text-sm text-slate-300 font-body leading-relaxed">{testimonial.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-12 border-t border-slate-800">
         <div className="max-w-6xl mx-auto px-6">
@@ -550,6 +629,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Chatbot */}
+      <Chatbot />
     </main>
   );
 }

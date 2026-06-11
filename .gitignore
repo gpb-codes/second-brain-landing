@@ -6,3 +6,20 @@
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Credentials
+.email-credentials
+.env
+.env.local
+
+# Logs
+*.log
+.activity.log
+
+# Node
+landing/node_modules/
+landing/.next/
+landing/out/
+
+# Build
+landing/dist/

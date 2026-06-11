@@ -17,8 +17,8 @@ updated: 2026-06-10
 
 | Metrica | Valor |
 |---------|-------|
-| Vaults totales | **3** |
-| Total archivos .md | **9** |
+| Vaults totales | **6** |
+| Total archivos .md | **32** |
 | Ultimo scan | 2026-06-10 |
 | Auto-update | Activo |
 | GitHub | gpb-codes/second-brain-landing |
@@ -27,41 +27,77 @@ updated: 2026-06-10
 
 ## Vaults Indexados
 
-### Desarrollo-Vault
-> [!tip] Snippets, Proyectos, Documentacion
-> Vault con 3 archivos en 3 categorias.
+### DevOps-Vault
+> [!tip] Docker, CI/CD, Kubernetes, Monitoring
+> Vault con 8 archivos en 4 categorias.
 
 | Metrica | Valor |
 |---------|-------|
-| Archivos | 3 |
-| Carpetas | 3 |
-| Tags | javascript, git, proyectos |
+| Archivos | 8 |
+| Carpetas | 4 |
+| Tags | docker, kubernetes, github-actions, monitoring |
 
-**Ruta:** `Vaults/Desarrollo-Vault`
+**Ruta:** `Vaults/DevOps-Vault`
 
-### Investigacion-Vault
-> [!tip] Articulos, Notas, Referencias
-> Vault con 3 archivos en 3 categorias.
-
-| Metrica | Valor |
-|---------|-------|
-| Archivos | 3 |
-| Carpetas | 3 |
-| Tags | machine-learning, papers, lectura |
-
-**Ruta:** `Vaults/Investigacion-Vault`
-
-### Personal-Vault
-> [!tip] Diario, Objetivos, Habitos
-> Vault con 3 archivos en 3 categorias.
+### Branding-Vault
+> [!tip] Identidad, Plantillas, Contenido, Campañas
+> Vault con 10 archivos en 4 categorias.
 
 | Metrica | Valor |
 |---------|-------|
-| Archivos | 3 |
-| Carpetas | 3 |
-| Tags | diario, objetivos, habitos |
+| Archivos | 10 |
+| Carpetas | 4 |
+| Tags | branding, logo, diseno, marketing |
 
-**Ruta:** `Vaults/Personal-Vault`
+**Ruta:** `Vaults/Branding-Vault`
+
+### Learning-Vault
+> [!tip] Cursos, Tutoriales, Recursos, Certificaciones
+> Vault con 12 archivos en 4 categorias.
+
+| Metrica | Valor |
+|---------|-------|
+| Archivos | 12 |
+| Carpetas | 4 |
+| Tags | cursos, tutoriales, certifications |
+
+**Ruta:** `Vaults/Learning-Vault`
+
+### Finanzas-Vault
+> [!tip] Presupuestos, Inversiones, Ahorro, Impuestos
+> Vault con 8 archivos en 4 categorias.
+
+| Metrica | Valor |
+|---------|-------|
+| Archivos | 8 |
+| Carpetas | 4 |
+| Tags | finanzas, inversiones, presupuesto |
+
+**Ruta:** `Vaults/Finanzas-Vault`
+
+### Salud-Vault
+> [!tip] Fitness, Nutrición, Salud Mental, Médico
+> Vault con 10 archivos en 4 categorias.
+
+| Metrica | Valor |
+|---------|-------|
+| Archivos | 10 |
+| Carpetas | 4 |
+| Tags | fitness, nutricion, salud, meditacion |
+
+**Ruta:** `Vaults/Salud-Vault`
+
+### Productividad-Vault
+> [!tip] GTD, Herramientas, Templates, System
+> Vault con 12 archivos en 4 categorias.
+
+| Metrica | Valor |
+|---------|-------|
+| Archivos | 12 |
+| Carpetas | 4 |
+| Tags | productividad, gtd, obsidian, zettelkasten |
+
+**Ruta:** `Vaults/Productividad-Vault`
 
 ---
 
@@ -72,18 +108,36 @@ updated: 2026-06-10
 ```mermaid
 mindmap
   root((Second Brain))
-    Desarrollo-Vault
-      01-Snippets
-      02-Proyectos
-      03-Documentacion
-    Investigacion-Vault
-      01-Articulos
-      02-Notas
-      03-Referencias
-    Personal-Vault
-      01-Diario
-      02-Objetivos
-      03-Habitos
+    DevOps-Vault
+      01-Docker
+      02-CI-CD
+      03-Kubernetes
+      04-Monitoring
+    Branding-Vault
+      01-Identidad
+      02-Plantillas
+      03-Contenido
+      04-Campanas
+    Learning-Vault
+      01-Cursos
+      02-Tutoriales
+      03-Recursos
+      04-Certificaciones
+    Finanzas-Vault
+      01-Presupuestos
+      02-Inversiones
+      03-Ahorro
+      04-Impuestos
+    Salud-Vault
+      01-Fitness
+      02-Nutricion
+      03-Salud-Mental
+      04-Medico
+    Productividad-Vault
+      01-GTD
+      02-Herramientas
+      03-Templates
+      04-System
 ```
 
 ---

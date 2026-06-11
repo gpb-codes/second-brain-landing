@@ -1,0 +1,26 @@
+{
+  "name": "github-vault-builder",
+  "version": "2.0.0",
+  "description": "Build Obsidian vaults from GitHub repositories",
+  "assistants": {
+    "opencode": {
+      "name": "OpenCode",
+      "command": "opencode",
+      "args": ["--prompt"],
+      "available": true
+    },
+    "claude": {
+      "name": "Claude",
+      "command": "claude",
+      "args": ["-p"],
+      "available": true
+    }
+  },
+  "defaultAssistant": "auto",
+  "vaultTypes": ["developer", "research", "business", "personal", "creative"],
+  "themes": ["minimal", "professional", "colorful", "dark", "github"],
+  "components": ["stats-card", "quick-links", "progress-bar", "timeline", "kanban"],
+  "defaultTheme": "minimal",
+  "defaultComponents": ["stats-card", "quick-links"],
+  "accentColor": "#7C3AED"
+}

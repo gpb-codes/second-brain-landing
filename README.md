@@ -28,7 +28,7 @@
 
 Second Brain es un vault de Obsidian que funciona como **centro de control** para todos tus otros vaults.
 
-Cuando creas un vault nuevo, ejecutas el script de update y el dashboard se regenera automaticamente.
+Incluye una **landing page** con Next.js para展示 tu segundo cerebro.
 
 </div>
 
@@ -60,6 +60,35 @@ Cuando creas un vault nuevo, ejecutas el script de update y el dashboard se rege
     </td>
     <td width="33%" valign="top" style="padding: 10px;">
       <div style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border-radius: 16px; padding: 20px; color: white; height: 180px;">
+        <div style="font-size: 24px; margin-bottom: 10px;">Landing Page</div>
+        <div style="font-size: 14px; opacity: 0.95; line-height: 1.6;">
+          Incluye app Next.js para展示 tu segundo cerebro
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="80%">
+  <tr>
+    <td width="33%" valign="top" style="padding: 10px;">
+      <div style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); border-radius: 16px; padding: 20px; color: white; height: 180px;">
+        <div style="font-size: 24px; margin-bottom: 10px;">Configurable</div>
+        <div style="font-size: 14px; opacity: 0.95; line-height: 1.6;">
+          Ruta del vault configurable desde el panel
+        </div>
+      </div>
+    </td>
+    <td width="33%" valign="top" style="padding: 10px;">
+      <div style="background: linear-gradient(135deg, #06B6D4 0%, #0891b2 100%); border-radius: 16px; padding: 20px; color: white; height: 180px;">
+        <div style="font-size: 24px; margin-bottom: 10px;">Auto-Search</div>
+        <div style="font-size: 14px; opacity: 0.95; line-height: 1.6;">
+          Busca vaults automaticamente en ubicaciones comunes
+        </div>
+      </div>
+    </td>
+    <td width="33%" valign="top" style="padding: 10px;">
+      <div style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); border-radius: 16px; padding: 20px; color: white; height: 180px;">
         <div style="font-size: 24px; margin-bottom: 10px;">GitHub Sync</div>
         <div style="font-size: 14px; opacity: 0.95; line-height: 1.6;">
           Sincronizacion automatica con GitHub Actions
@@ -104,53 +133,32 @@ Cuando creas un vault nuevo, ejecutas el script de update y el dashboard se rege
 
 <br/>
 
-## Ejemplos
+## Landing Page
 
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="90%">
+<div align="center">
+
+Este repo incluye una **landing page** con Next.js para展示 tu segundo cerebro.
+
+</div>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="80%">
   <tr>
     <td width="50%" valign="top" style="padding: 10px;">
       <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 16px; padding: 20px; border: 1px solid #8B5CF6;">
-        <div style="color: #8B5CF6; font-weight: bold; font-size: 16px; margin-bottom: 12px;">Vault: Desarrollo</div>
-        <div style="color: #9ca3af; font-size: 13px; line-height: 1.8;">
-          - Notas de codigo<br/>
-          - Snippets reutilizables<br/>
-          - Documentacion de APIs<br/>
-          - Proyectos activos
+        <div style="color: #8B5CF6; font-weight: bold; font-size: 16px; margin-bottom: 12px;">Desarrollo</div>
+        <div style="font-family: monospace; font-size: 12px; background: #0d1117; padding: 12px; border-radius: 8px; color: #e0e0e0; line-height: 1.8;">
+          cd landing<br/>
+          npm install<br/>
+          npm run dev
         </div>
       </div>
     </td>
     <td width="50%" valign="top" style="padding: 10px;">
       <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 16px; padding: 20px; border: 1px solid #3B82F6;">
-        <div style="color: #3B82F6; font-weight: bold; font-size: 16px; margin-bottom: 12px;">Vault: Investigacion</div>
-        <div style="color: #9ca3af; font-size: 13px; line-height: 1.8;">
-          - Articulos guardados<br/>
-          - Notas de lectures<br/>
-          - Referencias bibliograficas<br/>
-          - Ideas de proyectos
-        </div>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top" style="padding: 10px;">
-      <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 16px; padding: 20px; border: 1px solid #F59E0B;">
-        <div style="color: #F59E0B; font-weight: bold; font-size: 16px; margin-bottom: 12px;">Vault: Personal</div>
-        <div style="color: #9ca3af; font-size: 13px; line-height: 1.8;">
-          - Diario personal<br/>
-          - Metas y objetivos<br/>
-          - Habit tracker<br/>
-          - Journaling
-        </div>
-      </div>
-    </td>
-    <td width="50%" valign="top" style="padding: 10px;">
-      <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 16px; padding: 20px; border: 1px solid #06B6D4;">
-        <div style="color: #06B6D4; font-weight: bold; font-size: 16px; margin-bottom: 12px;">Vault: Negocios</div>
-        <div style="color: #9ca3af; font-size: 13px; line-height: 1.8;">
-          - Reuniones<br/>
-          - Propuestas<br/>
-          - Contactos<br/>
-          - Seguimiento de deals
+        <div style="color: #3B82F6; font-weight: bold; font-size: 16px; margin-bottom: 12px;">Deploy</div>
+        <div style="font-family: monospace; font-size: 12px; background: #0d1117; padding: 12px; border-radius: 8px; color: #e0e0e0; line-height: 1.8;">
+          npm run build<br/>
+          <span style="color: #9ca3af;"># Deploy a Vercel</span>
         </div>
       </div>
     </td>
@@ -172,27 +180,31 @@ Cuando creas un vault nuevo, ejecutas el script de update y el dashboard se rege
     <td style="background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); border-radius: 16px; padding: 24px; border: 1px solid #3B82F6;">
       <table border="0" cellpadding="6" width="100%">
         <tr>
-          <td style="color: #8B5CF6; font-weight: bold; width: 220px;">00-Master-Dashboard/</td>
+          <td style="color: #8B5CF6; font-weight: bold; width: 220px;">landing/</td>
+          <td style="color: #9ca3af; font-size: 13px;">App Next.js para landing page</td>
+        </tr>
+        <tr>
+          <td style="color: #3B82F6; font-weight: bold;">00-Master-Dashboard/</td>
           <td style="color: #9ca3af; font-size: 13px;">Panel principal</td>
         </tr>
         <tr>
-          <td style="color: #3B82F6; font-weight: bold;">01-Vaults-Index/</td>
+          <td style="color: #06B6D4; font-weight: bold;">01-Vaults-Index/</td>
           <td style="color: #9ca3af; font-size: 13px;">Indice detallado</td>
         </tr>
         <tr>
-          <td style="color: #06B6D4; font-weight: bold;">02-Unified-Search/</td>
+          <td style="color: #F59E0B; font-weight: bold;">02-Unified-Search/</td>
           <td style="color: #9ca3af; font-size: 13px;">Glosario universal</td>
         </tr>
         <tr>
-          <td style="color: #F59E0B; font-weight: bold;">03-Cross-Links/</td>
+          <td style="color: #8B5CF6; font-weight: bold;">03-Cross-Links/</td>
           <td style="color: #9ca3af; font-size: 13px;">Conexiones entre vaults</td>
         </tr>
         <tr>
-          <td style="color: #8B5CF6; font-weight: bold;">04-Meta-Analysis/</td>
+          <td style="color: #3B82F6; font-weight: bold;">04-Meta-Analysis/</td>
           <td style="color: #9ca3af; font-size: 13px;">Analisis cruzado</td>
         </tr>
         <tr>
-          <td style="color: #3B82F6; font-weight: bold;">05-Templates/</td>
+          <td style="color: #06B6D4; font-weight: bold;">05-Templates/</td>
           <td style="color: #9ca3af; font-size: 13px;">Plantillas para nuevos vaults</td>
         </tr>
         <tr>
@@ -200,7 +212,7 @@ Cuando creas un vault nuevo, ejecutas el script de update y el dashboard se rege
           <td style="color: #9ca3af; font-size: 13px;">Copia organizada de todos los vaults</td>
         </tr>
         <tr>
-          <td style="color: #06B6D4; font-weight: bold;">scripts/</td>
+          <td style="color: #8B5CF6; font-weight: bold;">scripts/</td>
           <td style="color: #9ca3af; font-size: 13px;">Scripts de auto-update</td>
         </tr>
       </table>

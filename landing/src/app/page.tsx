@@ -245,13 +245,13 @@ export default function Home() {
 
           <div className="rounded-xl overflow-hidden border border-slate-800/50 bg-slate-900/30">
             <iframe
-              src="https://drive.google.com/file/d/1ExMLIZxhqv1SQLkftNKaijmVL6Y3FwCp/preview"
+              src="https://www.youtube.com/embed/Gvlsvt-eGSM"
               width="100%"
               height="500"
-              allow="autoplay"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="w-full aspect-video"
-              title="Brain Interface Demo"
+              title="Second Brain Demo"
             />
           </div>
         </div>

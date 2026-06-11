@@ -31,7 +31,7 @@ echo.
 echo   [1] Panel de Control        [5] Configurar Ruta Vault
 echo   [2] OpenCode + Skill        [6] Buscar Vaults
 echo   [3] Abrir Obsidian          [7] Ruta por Defecto
-echo   [4] Abrir Carpeta
+echo   [4] Abrir Carpeta           [8] Configurar IAs
 echo.
 echo   ============================================================
 echo.
@@ -66,6 +66,9 @@ if "%choice%"=="1" (
     echo.
     echo   Ruta restaurada por defecto: %VAULT_PATH%
     timeout /t 2 >nul
+    goto MENU
+) else if "%choice%"=="8" (
+    call :CONFIGURE_AI
     goto MENU
 ) else (
     echo.
@@ -182,10 +185,84 @@ echo.
 if not exist "%VAULT_PATH%\Vaults" (
     echo   [!] No se encontro la carpeta 'Vaults' en la ruta actual.
     echo   Verifica que la ruta sea correcta.
-    echo.
-    echo   Presiona Enter para volver...
-    pause >nul
+echo.
+echo   Presiona Enter para volver...
+pause >nul
+exit /b
+
+:: ============================================================
+:: FUNCION: Configurar IAs
+:: ============================================================
+:CONFIGURE_AI
+cls
+echo.
+echo   ============================================================
+echo     CONFIGURACION DE INTELIGENCIA ARTIFICIAL
+echo   ============================================================
+echo.
+echo   Selecciona las IAs que quieres usar (1-7):
+echo.
+echo   [1] OpenCode     [5] ChatGPT
+echo   [2] Claude       [6] Copilot
+echo   [3] Grok         [7] Gemini
+echo   [4] NotebookLM
+echo.
+echo   Modos de trabajo:
+echo   [T] Individual - Una IA a la vez
+echo   [U] Tandem     - 2 IAs trabajan juntas
+echo   [E] Equipo     - Todas las IAs colaboran
+echo.
+echo   [V] Volver al menu principal
+echo.
+set /p aiChoice="  Selecciona: "
+
+if "%aiChoice%"=="1" (
+    echo   OpenCode seleccionado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="2" (
+    echo   Claude seleccionado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="3" (
+    echo   Grok seleccionado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="4" (
+    echo   NotebookLM seleccionado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="5" (
+    echo   ChatGPT seleccionado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="6" (
+    echo   Copilot seleccionado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="7" (
+    echo   Gemini seleccionado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="T" (
+    echo   Modo individual activado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="U" (
+    echo   Modo tandem activado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="E" (
+    echo   Modo equipo activado
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+) else if "%aiChoice%"=="V" (
     exit /b
+) else (
+    echo   Opcion no valida
+    timeout /t 1 >nul
+    goto CONFIGURE_AI
+)
 )
 
 set "vaultCount=0"

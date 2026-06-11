@@ -105,13 +105,14 @@ function Show-Menu {
     Write-Host "  +--- INTELIGENCIA -----------------------------------------+" -ForegroundColor DarkMagenta
     Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
     Write-Host "  |  [C]  OpenCode + Skill       [A]  Asistente IA           |" -ForegroundColor Magenta
+    Write-Host "  |  [Y]  Configurar IAs         [P]  Prompt con IA          |" -ForegroundColor Magenta
     Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
     Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkMagenta
     Write-Host ""
     Write-Host "  +--- INTEGRACIONES ----------------------------------------+" -ForegroundColor DarkYellow
     Write-Host "  |                                                           |" -ForegroundColor DarkYellow
     Write-Host "  |  [G]  Git Push a GitHub             [N]  Notificaciones  |" -ForegroundColor Yellow
-    Write-Host "  |  [I]  Integraciones                 [P]  Plugins         |" -ForegroundColor Yellow
+    Write-Host "  |  [I]  Integraciones                 [J]  Plugins         |" -ForegroundColor Yellow
     Write-Host "  |                                                           |" -ForegroundColor DarkYellow
     Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkYellow
     Write-Host ""
@@ -189,6 +190,196 @@ function Run-Script {
     } else {
         Write-Host ""
         Write-Host "  [!] Script no encontrado: $ScriptName" -ForegroundColor Red
+    }
+}
+
+# Configuracion de IAs
+$AIConfigFile = Join-Path $VaultsPath "ai-config.json"
+
+$DefaultAIConfig = @{
+    IAs = @(
+        @{ Name = "OpenCode"; Enabled = $true; Command = "opencode"; Args = @("--prompt") }
+        @{ Name = "Claude"; Enabled = $false; Command = "claude"; Args = @("-p") }
+        @{ Name = "Grok"; Enabled = $false; Command = "grok"; Args = @("--ask") }
+        @{ Name = "NotebookLM"; Enabled = $false; Command = "notebooklm"; Args = @() }
+        @{ Name = "ChatGPT"; Enabled = $false; Command = "chatgpt"; Args = @("--prompt") }
+        @{ Name = "Copilot"; Enabled = $false; Command = "copilot"; Args = @("--ask") }
+        @{ Name = "Gemini"; Enabled = $false; Command = "gemini"; Args = @("--prompt") }
+    )
+    ModoTrabajo = "individual"  # individual, tandem, o equipo
+}
+
+function Get-AIConfig {
+    if (Test-Path -LiteralPath $AIConfigFile) {
+        try {
+            $config = Get-Content -LiteralPath $AIConfigFile -Raw | ConvertFrom-Json
+            return $config
+        } catch {
+            return $DefaultAIConfig
+        }
+    }
+    return $DefaultAIConfig
+}
+
+function Save-AIConfig {
+    param([hashtable]$Config)
+    $Config | ConvertTo-Json -Depth 10 | Out-File -LiteralPath $AIConfigFile -Encoding UTF8 -Force
+}
+
+function Get-ActiveIAs {
+    $config = Get-AIConfig
+    return $config.IAs | Where-Object { $_.Enabled -eq $true }
+}
+
+function Invoke-AI {
+    param(
+        [string]$Prompt,
+        [string]$Mode = "single"  # single, tandem, team
+    )
+    
+    $config = Get-AIConfig
+    $activeIAs = $config.IAs | Where-Object { $_.Enabled -eq $true }
+    
+    if ($activeIAs.Count -eq 0) {
+        Write-Host "  [!] No hay IAs configuradas. Usa [Y] para configurar." -ForegroundColor Yellow
+        return
+    }
+    
+    Write-Host ""
+    Write-Host "  Enviando prompt a $($activeIAs.Count) IA(s)..." -ForegroundColor Cyan
+    Write-Host ""
+    
+    switch ($Mode) {
+        "single" {
+            # Ejecutar IA individual (la primera activa)
+            $ia = $activeIAs | Select-Object -First 1
+            Write-Host "  [$($ia.Name)] Procesando..." -ForegroundColor Magenta
+            if ($ia.Command -eq "opencode") {
+                & opencode --prompt $Prompt
+            } else {
+                Write-Host "  [!] Komando '$($ia.Command)' belum terinstal atau tidak didukung." -ForegroundColor Yellow
+            }
+        }
+        "tandem" {
+            # Ejecutar 2 IAs en tandem
+            $selectedIAs = $activeIAs | Select-Object -First 2
+            foreach ($ia in $selectedIAs) {
+                Write-Host "  [$($ia.Name)] Procesando en paralelo..." -ForegroundColor Magenta
+            }
+            Write-Host ""
+            Write-Host "  Modo tandem: Las IAs trabajan en el mismo prompt." -ForegroundColor Gray
+            # Aqui iria la logica para ejecutar en paralelo
+        }
+        "team" {
+            # Ejecutar todas las IAs como equipo
+            Write-Host "  Modo equipo: Todas las IAs colaboran." -ForegroundColor Gray
+            foreach ($ia in $activeIAs) {
+                Write-Host "  [$($ia.Name)] Listo para procesar." -ForegroundColor Magenta
+            }
+        }
+    }
+}
+
+function Show-AIConfigMenu {
+    Clear-Host
+    $config = Get-AIConfig
+    
+    Write-Host ""
+    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
+    Write-Host "    CONFIGURACION DE INTELIGENCIA ARTIFICIAL" -ForegroundColor Magenta
+    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
+    Write-Host ""
+    Write-Host "  Modo de trabajo actual: $($config.ModoTrabajo.ToUpper())" -ForegroundColor Cyan
+    Write-Host ""
+    
+    Write-Host "  +--- IAs DISPONIBLES -------------------------------------+" -ForegroundColor DarkMagenta
+    Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
+    
+    $i = 1
+    foreach ($ia in $config.IAs) {
+        $status = if ($ia.Enabled) { "[X]" } else { "[ ]" }
+        $color = if ($ia.Enabled) { "Green" } else { "Gray" }
+        Write-Host "  |  [$i]  $status $($ia.Name.PadRight(20))" -ForegroundColor $color -NoNewline
+        if ($i % 2 -eq 0) {
+            Write-Host "  |" -ForegroundColor DarkMagenta
+        } else {
+            Write-Host ""
+        }
+        $i++
+    }
+    
+    if ($i % 2 -eq 0) {
+        Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
+    }
+    
+    Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkMagenta
+    Write-Host ""
+    Write-Host "  +--- MODO DE TRABAJO --------------------------------------+" -ForegroundColor DarkCyan
+    Write-Host "  |                                                           |" -ForegroundColor DarkCyan
+    Write-Host "  |  [T]  Individual  - Una IA a la vez                      |" -ForegroundColor White
+    Write-Host "  |  [U]  Tandem      - 2 IAs trabajan juntas                |" -ForegroundColor White
+    Write-Host "  |  [E]  Equipo      - Todas las IAs colaboran              |" -ForegroundColor White
+    Write-Host "  |                                                           |" -ForegroundColor DarkCyan
+    Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkCyan
+    Write-Host ""
+    Write-Host "  [Y]  Probar IAs seleccionadas        [V]  Volver al menu" -ForegroundColor DarkYellow
+    Write-Host ""
+    
+    $choice = Read-Host "  Selecciona"
+    
+    switch ($choice.ToUpper()) {
+        { $_ -match '^[1-7]$' } {
+            $index = [int]$choice - 1
+            $config.IAs[$index].Enabled = -not $config.IAs[$index].Enabled
+            Save-AIConfig -Config $config
+            $status = if ($config.IAs[$index].Enabled) { "activada" } else { "desactivada" }
+            Write-Host ""
+            Write-Host "  [OK] $($config.IAs[$index].Name) $status" -ForegroundColor Green
+            Start-Sleep -Seconds 1
+            Show-AIConfigMenu
+        }
+        "T" {
+            $config.ModoTrabajo = "individual"
+            Save-AIConfig -Config $config
+            Write-Host ""
+            Write-Host "  [OK] Modo individual activado" -ForegroundColor Green
+            Start-Sleep -Seconds 1
+            Show-AIConfigMenu
+        }
+        "U" {
+            $config.ModoTrabajo = "tandem"
+            Save-AIConfig -Config $config
+            Write-Host ""
+            Write-Host "  [OK] Modo tandem activado" -ForegroundColor Green
+            Start-Sleep -Seconds 1
+            Show-AIConfigMenu
+        }
+        "E" {
+            $config.ModoTrabajo = "equipo"
+            Save-AIConfig -Config $config
+            Write-Host ""
+            Write-Host "  [OK] Modo equipo activado" -ForegroundColor Green
+            Start-Sleep -Seconds 1
+            Show-AIConfigMenu
+        }
+        "Y" {
+            $prompt = Read-Host "  Ingresa el prompt para probar"
+            if ($prompt) {
+                Invoke-AI -Prompt $prompt -Mode $config.ModoTrabajo
+            }
+            Write-Host ""
+            Write-Host "  Presiona Enter para volver..." -ForegroundColor DarkGray
+            Read-Host
+            Show-AIConfigMenu
+        }
+        "V" {
+            return
+        }
+        default {
+            Write-Host "  Opcion no valida" -ForegroundColor Yellow
+            Start-Sleep -Seconds 1
+            Show-AIConfigMenu
+        }
     }
 }
 
@@ -509,6 +700,18 @@ do {
             Run-Script "notify.ps1" "Notificaciones"
         }
         "P" {
+            $pluginsFile = Join-Path $VaultsPath "05-Templates\Plugins-Recomendados.md"
+            if (Test-Path $pluginsFile) {
+                Clear-Host
+                Get-Content $pluginsFile | Write-Host
+            } else {
+                Write-Host "  Archivo no encontrado" -ForegroundColor Red
+            }
+        }
+        "Y" {
+            Show-AIConfigMenu
+        }
+        "J" {
             $pluginsFile = Join-Path $VaultsPath "05-Templates\Plugins-Recomendados.md"
             if (Test-Path $pluginsFile) {
                 Clear-Host

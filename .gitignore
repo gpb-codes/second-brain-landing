@@ -27,3 +27,4 @@ out/
 
 # Configuracion local del vault
 vault-config.txt
+ai-config.json

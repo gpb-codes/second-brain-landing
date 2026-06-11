@@ -15,5 +15,15 @@ Thumbs.db
 # Node
 node_modules/
 
+# Next.js
+.next/
+out/
+
 # Logs
 *.log
+
+# Wrangler
+.wrangler/
+
+# Configuracion local del vault
+vault-config.txt

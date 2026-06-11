@@ -8,9 +8,49 @@
 #>
 
 param(
-    [string]$VaultsPath = "D:\vaults\Second-Brain",
-    [string]$ScriptsPath = "D:\vaults\Second-Brain\scripts"
+    [string]$VaultsPath = "",
+    [string]$ScriptsPath = ""
 )
+
+# Archivo de configuracion
+$ConfigFile = Join-Path $PSScriptRoot "..\vault-config.txt"
+
+# Funcion para cargar configuracion
+function Get-VaultConfig {
+    if (Test-Path -LiteralPath $ConfigFile) {
+        $savedPath = Get-Content -LiteralPath $ConfigFile -First 1 -ErrorAction SilentlyContinue
+        if ($savedPath -and (Test-Path -LiteralPath $savedPath)) {
+            return $savedPath.TrimEnd('\')
+        }
+    }
+    return $null
+}
+
+# Funcion para guardar configuracion
+function Set-VaultConfig {
+    param([string]$Path)
+    $Path.TrimEnd('\') | Out-File -LiteralPath $ConfigFile -Encoding UTF8 -Force
+}
+
+# Determinar ruta del vault
+if (-not $VaultsPath -or -not (Test-Path -LiteralPath $VaultsPath)) {
+    # Intentar cargar desde configuracion
+    $savedPath = Get-VaultConfig
+    if ($savedPath) {
+        $VaultsPath = $savedPath
+    } else {
+        # Usar directorio del script como fallback
+        $VaultsPath = Split-Path -Parent $PSScriptRoot
+        if (-not $VaultsPath) {
+            $VaultsPath = $PSScriptRoot
+        }
+    }
+}
+
+# Determinar ruta de scripts
+if (-not $ScriptsPath) {
+    $ScriptsPath = Join-Path $VaultsPath "scripts"
+}
 
 # Configuracion visual
 $Host.UI.RawUI.WindowTitle = "SECOND BRAIN - Neural Control Panel"
@@ -20,12 +60,13 @@ $VaultsPath = $VaultsPath.TrimEnd('\')
 $ScriptsPath = $ScriptsPath.TrimEnd('\')
 
 function Get-VaultStats {
-    $vaults = Get-ChildItem -Path "$VaultsPath\Vaults" -Directory -ErrorAction SilentlyContinue
+    $vaultsPath = Join-Path $VaultsPath "Vaults"
+    $vaults = Get-ChildItem -Path $vaultsPath -Directory -ErrorAction SilentlyContinue
     $totalFiles = 0
     foreach ($v in $vaults) {
         $totalFiles += (Get-ChildItem -Path $v.FullName -Filter "*.md" -Recurse -ErrorAction SilentlyContinue).Count
     }
-    return @{ Vaults = $vaults.Count; Files = $totalFiles; LastSync = (Get-Date -Format "HH:mm") }
+    return @{ Vaults = $vaults.Count; Files = $totalFiles; LastSync = (Get-Date -Format "HH:mm"); CurrentPath = $VaultsPath }
 }
 
 function Show-Header {
@@ -46,6 +87,7 @@ function Show-Header {
     Write-Host ""
     Write-Host "  +----------------------------------------------------------+" -ForegroundColor DarkGray
     Write-Host "  |  Vaults: $($stats.Vaults)    |    Archivos: $($stats.Files)    |    Sync: $($stats.LastSync)    |" -ForegroundColor Gray
+    Write-Host "  |  Ruta: $($stats.CurrentPath)" -ForegroundColor DarkGray
     Write-Host "  +----------------------------------------------------------+" -ForegroundColor DarkGray
     Write-Host ""
 }
@@ -77,6 +119,7 @@ function Show-Menu {
     Write-Host "  |                                                           |" -ForegroundColor DarkGreen
     Write-Host "  |  [O]  Abrir en Obsidian             [V]  Ver Vaults      |" -ForegroundColor Green
     Write-Host "  |  [R]  Abrir Carpeta Raiz            [L]  Log Actividad   |" -ForegroundColor Green
+    Write-Host "  |  [S]  Configurar Ruta Vault         [D]  Ruta Default    |" -ForegroundColor Green
     Write-Host "  |                                                           |" -ForegroundColor DarkGreen
     Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkGreen
     Write-Host ""
@@ -147,6 +190,148 @@ function Run-Script {
         Write-Host ""
         Write-Host "  [!] Script no encontrado: $ScriptName" -ForegroundColor Red
     }
+}
+
+function Set-VaultPath {
+    Clear-Host
+    Write-Host ""
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host "    CONFIGURAR RUTA DEL VAULT MAESTRO" -ForegroundColor Green
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host ""
+    Write-Host "  Ruta actual: $VaultsPath" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  [1]  Ingresar nueva ruta manualmente" -ForegroundColor White
+    Write-Host "  [2]  Seleccionar carpeta con dialogo" -ForegroundColor White
+    Write-Host "  [3]  Buscar vaults automaticamente" -ForegroundColor White
+    Write-Host "  [4]  Volver al menu principal" -ForegroundColor White
+    Write-Host ""
+    
+    $configChoice = Read-Host "  Selecciona"
+    
+    switch ($configChoice) {
+        "1" {
+            Write-Host ""
+            $newPath = Read-Host "  Ingresa la nueva ruta del vault"
+            if ($newPath -and (Test-Path -LiteralPath $newPath)) {
+                $script:VaultsPath = $newPath.TrimEnd('\')
+                $script:ScriptsPath = Join-Path $script:VaultsPath "scripts"
+                Set-VaultConfig -Path $script:VaultsPath
+                Write-Host ""
+                Write-Host "  [OK] Ruta configurada: $($script:VaultsPath)" -ForegroundColor Green
+            } else {
+                Write-Host ""
+                Write-Host "  [!] La ruta no existe o es invalida." -ForegroundColor Red
+            }
+            Start-Sleep -Seconds 2
+        }
+        "2" {
+            Write-Host ""
+            Write-Host "  Abriendo dialogo de seleccion..." -ForegroundColor Cyan
+            Add-Type -AssemblyName System.Windows.Forms
+            $folderDialog = New-Object System.Windows.Forms.FolderBrowserDialog
+            $folderDialog.Description = "Selecciona tu Vault Maestro"
+            $folderDialog.ShowNewFolderButton = $false
+            
+            if ($folderDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+                $script:VaultsPath = $folderDialog.SelectedPath.TrimEnd('\')
+                $script:ScriptsPath = Join-Path $script:VaultsPath "scripts"
+                Set-VaultConfig -Path $script:VaultsPath
+                Write-Host ""
+                Write-Host "  [OK] Ruta configurada: $($script:VaultsPath)" -ForegroundColor Green
+            } else {
+                Write-Host ""
+                Write-Host "  Operacion cancelada." -ForegroundColor Yellow
+            }
+            Start-Sleep -Seconds 2
+        }
+        "3" {
+            Search-AutoVaults
+        }
+        "4" {
+            return
+        }
+    }
+}
+
+function Search-AutoVaults {
+    Clear-Host
+    Write-Host ""
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host "    BUSQUEDA AUTOMATICA DE VAULTS" -ForegroundColor Green
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host ""
+    Write-Host "  Buscando vaults en ubicaciones comunes..." -ForegroundColor Cyan
+    Write-Host ""
+    
+    $searchPaths = @(
+        "$env:USERPROFILE\Documents\Vaults",
+        "$env:USERPROFILE\OneDrive\Vaults",
+        "D:\Vaults",
+        "D:\Obsidian",
+        "$env:USERPROFILE\Documents\Obsidian",
+        "$env:USERPROFILE\Desktop\Vaults",
+        "$env:USERPROFILE\Dropbox\Vaults"
+    )
+    
+    $foundPaths = @()
+    
+    foreach ($path in $searchPaths) {
+        if (Test-Path -LiteralPath $path -PathType Container) {
+            Write-Host "  [+] Encontrado: $path" -ForegroundColor Green
+            $foundPaths += $path
+            
+            # Buscar subcarpetas que puedan ser vaults
+            $subDirs = Get-ChildItem -Path $path -Directory -ErrorAction SilentlyContinue | 
+                Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "*.md") -ErrorAction SilentlyContinue } |
+                Select-Object -First 3
+            
+            foreach ($sub in $subDirs) {
+                Write-Host "      - $($sub.Name)" -ForegroundColor Gray
+            }
+        }
+    }
+    
+    Write-Host ""
+    
+    if ($foundPaths.Count -eq 0) {
+        Write-Host "  No se encontraron vaults en las rutas comunes." -ForegroundColor Yellow
+        Write-Host "  Intenta ingresar la ruta manualmente." -ForegroundColor Yellow
+    } else {
+        Write-Host "  Se encontraron $($foundPaths.Count) posibles ubicaciones." -ForegroundColor Green
+        Write-Host ""
+        $select = Read-Host "  Selecciona una ruta (numero) o Enter para cancelar"
+        
+        if ($select -match '^\d+$' -and [int]$select -ge 1 -and [int]$select -le $foundPaths.Count) {
+            $selectedIndex = [int]$select - 1
+            $script:VaultsPath = $foundPaths[$selectedIndex].TrimEnd('\')
+            $script:ScriptsPath = Join-Path $script:VaultsPath "scripts"
+            Set-VaultConfig -Path $script:VaultsPath
+            Write-Host ""
+            Write-Host "  [OK] Ruta configurada: $($script:VaultsPath)" -ForegroundColor Green
+        }
+    }
+    
+    Start-Sleep -Seconds 2
+}
+
+function Reset-VaultPath {
+    $script:VaultsPath = Split-Path -Parent $PSScriptRoot
+    if (-not $script:VaultsPath) {
+        $script:VaultsPath = $PSScriptRoot
+    }
+    $script:ScriptsPath = Join-Path $script:VaultsPath "scripts"
+    Set-VaultConfig -Path $script:VaultsPath
+    
+    Clear-Host
+    Write-Host ""
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host "    RUTA RESTAURADA" -ForegroundColor Green
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host ""
+    Write-Host "  Ruta por defecto: $($script:VaultsPath)" -ForegroundColor Cyan
+    Write-Host ""
+    Start-Sleep -Seconds 2
 }
 
 function Start-OpenCodeWithSkill {
@@ -347,6 +532,12 @@ do {
         }
         "L" {
             Show-ActivityLog
+        }
+        "S" {
+            Set-VaultPath
+        }
+        "D" {
+            Reset-VaultPath
         }
         "X" {
             Write-Host ""

@@ -3,7 +3,7 @@ title: "Second Brain - Dashboard Maestro"
 aliases: [dashboard, master, hub, inicio]
 tags: [second-brain, dashboard, master]
 created: 2026-06-09
-updated: 2026-06-10
+updated: 2026-06-11 02:52
 ---
 
 # Second Brain - Hub Maestro

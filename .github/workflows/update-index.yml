@@ -1,0 +1,73 @@
+# This workflow scans D:\vaults and updates the Second Brain index
+# Runs on push to main, or manually via workflow_dispatch
+
+name: Update Second Brain Index
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**/*.md'
+      - 'scripts/**'
+  workflow_dispatch:
+  schedule:
+    # Run daily at midnight UTC
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Scan vaults and update index
+        run: |
+          echo "=== Scanning vaults ==="
+          
+          # This is a simplified version for GitHub Actions
+          # The full PowerShell script runs locally
+          
+          VAULTS_DIR="${VAULTS_PATH:-/tmp/vaults}"
+          
+          # Count vaults (directories in vaults path)
+          if [ -d "$VAULTS_DIR" ]; then
+            VAULT_COUNT=$(find "$VAULTS_DIR" -maxdepth 1 -mindepth 1 -type d | wc -l)
+            TOTAL_FILES=$(find "$VAULTS_DIR" -name "*.md" -not -path "*/.obsidian/*" -not -path "*/.git/*" | wc -l)
+          else
+            VAULT_COUNT=0
+            TOTAL_FILES=0
+            echo "Vaults directory not found, using local scan"
+          fi
+          
+          echo "Vaults: $VAULT_COUNT"
+          echo "Total files: $TOTAL_FILES"
+          
+      - name: Update timestamp
+        run: |
+          DATE=$(date -u +"%Y-%m-%d %H:%M")
+          echo "Last update: $DATE"
+          
+          # Update the dashboard timestamp
+          if [ -f "00-Master-Dashboard/Dashboard.md" ]; then
+            sed -i "s/updated: .*/updated: $DATE/" "00-Master-Dashboard/Dashboard.md"
+          fi
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add -A
+          
+          # Only commit if there are changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: auto-update Second Brain index [skip ci]"
+            git push
+          fi

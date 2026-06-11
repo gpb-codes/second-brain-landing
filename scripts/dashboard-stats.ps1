@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Dashboard de metricas del Second Brain.
+    Dashboard de metricas del Second Brain PACE.
 .DESCRIPTION
-    Muestra estadisticas detalladas de todos los vaults.
+    Muestra estadisticas detalladas de todas las areas PACE.
 .EXAMPLE
     .\dashboard-stats.ps1
     .\dashboard-stats.ps1 -Detailed
@@ -16,84 +16,114 @@ param(
 
 $Date = Get-Date -Format "yyyy-MM-dd HH:mm"
 
-Write-Host "=== Second Brain Dashboard ===" -ForegroundColor Cyan
+Write-Host "=== Second Brain PACE Dashboard ===" -ForegroundColor Green
 Write-Host "Fecha: $Date" -ForegroundColor Gray
 Write-Host ""
 
-# Estadisticas generales
-$vaultDirs = Get-ChildItem -Path "$VaultsPath\Vaults" -Directory -ErrorAction SilentlyContinue
+# Estadisticas PACE
+$paceCategories = @(
+    @{ Name = "00 Inbox"; Path = "00 Inbox" },
+    @{ Name = "01 Proyectos"; Path = "01 Proyectos" },
+    @{ Name = "02 Áreas"; Path = "02 Áreas" },
+    @{ Name = "03 Conexiones - MOCs"; Path = "03 Conexiones - MOCs" },
+    @{ Name = "04 Extracciones AI"; Path = "04 Extracciones AI" },
+    @{ Name = "05 Archivo"; Path = "05 Archivo" }
+)
+
 $totalFiles = 0
 $totalSize = 0
-$vaultStats = @()
+$paceStats = @()
+$awsCount = 0
 
-foreach ($vault in $vaultDirs) {
-    $mdFiles = Get-ChildItem -Path $vault.FullName -Recurse -Filter "*.md" -File |
-        Where-Object { $_.FullName -notmatch '\\\.obsidian\\' }
-    
-    $fileCount = $mdFiles.Count
-    $fileSize = ($mdFiles | Measure-Object -Property Length -Sum).Sum
-    $totalFiles += $fileCount
-    $totalSize += $fileSize
-    
-    $categories = Get-ChildItem -Path $vault.FullName -Directory |
-        Where-Object { $_.Name -notin @('.obsidian', '.git', 'node_modules') }
-    
-    $vaultStats += [PSCustomObject]@{
-        Name = $vault.Name
-        Files = $fileCount
-        Size = [math]::Round($fileSize / 1KB, 2)
-        Categories = $categories.Count
-        LastModified = ($mdFiles | Sort-Object LastWriteTime -Descending | Select-Object -First 1).LastWriteTime
+foreach ($cat in $paceCategories) {
+    $fullPath = Join-Path $VaultsPath $cat.Path
+    if (Test-Path $fullPath) {
+        $mdFiles = Get-ChildItem -Path $fullPath -Recurse -Filter "*.md" -File |
+            Where-Object { $_.FullName -notmatch '\\\.obsidian\\' }
+        
+        $fileCount = $mdFiles.Count
+        $fileSize = ($mdFiles | Measure-Object -Property Length -Sum).Sum
+        $totalFiles += $fileCount
+        $totalSize += $fileSize
+        
+        $subDirs = Get-ChildItem -Path $fullPath -Directory |
+            Where-Object { $_.Name -notin @('.obsidian', '.git', 'node_modules') }
+        
+        $paceStats += [PSCustomObject]@{
+            Name = $cat.Name
+            Files = $fileCount
+            Size = [math]::Round($fileSize / 1KB, 2)
+            SubDirs = $subDirs.Count
+            LastModified = if ($mdFiles) { ($mdFiles | Sort-Object LastWriteTime -Descending | Select-Object -First 1).LastWriteTime } else { $null }
+        }
     }
 }
 
+# Count AWS files specifically
+$awsPath = Join-Path $VaultsPath "02 Areas\Trabajo\AWS"
+if (Test-Path $awsPath) {
+    $awsCount = (Get-ChildItem -Path $awsPath -Recurse -Filter "*.md" -File).Count
+}
+$awsGuidePath = Join-Path $VaultsPath "02 Areas\Trabajo\Guia - Amazon Web Services.md"
+if (Test-Path $awsGuidePath) {
+    $awsCount++
+}
+
+# Count LinkedIn files specifically
+$linkedinPath = Join-Path $VaultsPath "05 Personal\LinkedIn Personal Brand"
+$linkedinCount = 0
+if (Test-Path $linkedinPath) {
+    $linkedinCount = (Get-ChildItem -Path $linkedinPath -Recurse -Filter "*.md" -File).Count
+}
+
 # Mostrar resumen
-Write-Host "RESUMEN GENERAL" -ForegroundColor Magenta
-Write-Host "================" -ForegroundColor Magenta
-Write-Host "  Vaults totales:      $($vaultDirs.Count)" -ForegroundColor White
-Write-Host "  Archivos .md:        $totalFiles" -ForegroundColor White
-Write-Host "  Tamano total:        $([math]::Round($totalSize / 1MB, 2)) MB" -ForegroundColor White
+Write-Host "RESUMEN PACE" -ForegroundColor Green
+Write-Host "=============" -ForegroundColor Green
+Write-Host "  Categorias PACE:    $($paceCategories.Count)" -ForegroundColor White
+Write-Host "  Archivos .md:       $totalFiles" -ForegroundColor White
+Write-Host "  Tamano total:       $([math]::Round($totalSize / 1MB, 2)) MB" -ForegroundColor White
+Write-Host "  LinkedIn archivos:  $linkedinCount" -ForegroundColor White
+Write-Host "  AWS archivos:       $awsCount" -ForegroundColor White
 Write-Host ""
 
-# Mostrar por vault
-Write-Host "DETALLE POR VAULT" -ForegroundColor Magenta
-Write-Host "==================" -ForegroundColor Magenta
+# Mostrar por categoria
+Write-Host "DETALLE POR CATEGORIA PACE" -ForegroundColor Green
+Write-Host "===========================" -ForegroundColor Green
 
-$maxLength = ($vaultStats | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
+$maxLength = ($paceStats | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum).Maximum
 
-foreach ($v in ($vaultStats | Sort-Object Files -Descending)) {
-    $bar = "#" * [math]::Min($v.Files, 50)
+foreach ($v in ($paceStats | Sort-Object Files -Descending)) {
     $padding = " " * ($maxLength - $v.Name.Length + 2)
     
     Write-Host "  $($v.Name)$padding" -NoNewline -ForegroundColor White
     Write-Host "$($v.Files) archivos" -NoNewline -ForegroundColor Cyan
     Write-Host " ($($v.Size) KB)" -ForegroundColor Gray
     
-    if ($Detailed) {
-        Write-Host "    Categorias: $($v.Categories) | Ultima modificacion: $($v.LastModified)" -ForegroundColor DarkGray
+    if ($Detailed -and $v.SubDirs -gt 0) {
+        Write-Host "    Sub-carpetas: $($v.SubDirs)" -ForegroundColor DarkGray
     }
 }
 
 Write-Host ""
 
-# Top vaults
-Write-Host "TOP 3 VAULTS POR TAMANO" -ForegroundColor Magenta
-Write-Host "========================" -ForegroundColor Magenta
-$vaultStats | Sort-Object Size -Descending | Select-Object -First 3 | ForEach-Object {
+# Top categorias
+Write-Host "TOP 3 CATEGORIAS POR TAMANO" -ForegroundColor Green
+Write-Host "=============================" -ForegroundColor Green
+$paceStats | Sort-Object Size -Descending | Select-Object -First 3 | ForEach-Object {
     Write-Host "  $($_.Name): $($_.Size) KB" -ForegroundColor Yellow
 }
 
 Write-Host ""
 
 # Archivos recientes
-Write-Host "ULTIMOS 5 ARCHIVOS MODIFICADOS" -ForegroundColor Magenta
-Write-Host "================================" -ForegroundColor Magenta
-Get-ChildItem -Path "$VaultsPath\Vaults" -Recurse -Filter "*.md" -File |
-    Where-Object { $_.FullName -notmatch '\\\.obsidian\\' } |
+Write-Host "ULTIMOS 5 ARCHIVOS MODIFICADOS" -ForegroundColor Green
+Write-Host "================================" -ForegroundColor Green
+Get-ChildItem -Path $VaultsPath -Recurse -Filter "*.md" -File |
+    Where-Object { $_.FullName -notmatch '\\\.obsidian\\' -and $_.FullName -notmatch '\\\.git\\' -and $_.FullName -notmatch '\\99 Sistema\\' } |
     Sort-Object LastWriteTime -Descending |
     Select-Object -First 5 |
     ForEach-Object {
-        $relativePath = $_.FullName.Replace("$VaultsPath\Vaults\", "")
+        $relativePath = $_.FullName.Replace("$VaultsPath\", "")
         Write-Host "  $($_.LastWriteTime.ToString('HH:mm')) - $relativePath" -ForegroundColor Gray
     }
 
@@ -102,14 +132,14 @@ Write-Host "=== Dashboard Completado ===" -ForegroundColor Green
 
 # Exportar a markdown si se solicita
 if ($Export) {
-    $exportFile = Join-Path $VaultsPath "00-Master-Dashboard\Stats-$Date.md"
+    $exportFile = Join-Path $VaultsPath "99 Sistema\Stats-$Date.md"
     $statsMd = @"
 ---
-title: "Estadisticas - $Date"
-tags: [stats, dashboard]
+title: "Estadisticas PACE - $Date"
+tags: [stats, dashboard, pace]
 ---
 
-# Estadisticas del Second Brain
+# Estadisticas del Second Brain PACE
 
 Fecha: $Date
 
@@ -117,19 +147,19 @@ Fecha: $Date
 
 | Metrica | Valor |
 |---------|-------|
-| Vaults totales | $($vaultDirs.Count) |
+| Categorias PACE | $($paceCategories.Count) |
 | Archivos .md | $totalFiles |
 | Tamano total | $([math]::Round($totalSize / 1MB, 2)) MB |
 
-## Detalle por Vault
+## Detalle por Categoria
 
-| Vault | Archivos | Tamano (KB) | Categorias |
-|-------|----------|-------------|------------|
-$($vaultStats | ForEach-Object { "| $($_.Name) | $($_.Files) | $($_.Size) | $($_.Categories) |" } | Out-String)
+| Categoria | Archivos | Tamano (KB) | Sub-carpetas |
+|-----------|----------|-------------|--------------|
+$($paceStats | ForEach-Object { "| $($_.Name) | $($_.Files) | $($_.Size) | $($_.SubDirs) |" } | Out-String)
 
 ## Top 3 por Tamano
 
-$($vaultStats | Sort-Object Size -Descending | Select-Object -First 3 | ForEach-Object { "- **$($_.Name)**: $($_.Size) KB" } | Out-String)
+$($paceStats | Sort-Object Size -Descending | Select-Object -First 3 | ForEach-Object { "- **$($_.Name)**: $($_.Size) KB" } | Out-String)
 "@
     
     Set-Content -Path $exportFile -Value $statsMd -Encoding UTF8

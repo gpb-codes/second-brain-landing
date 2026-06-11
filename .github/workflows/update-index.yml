@@ -1,7 +1,7 @@
-# This workflow scans D:\vaults and updates the Second Brain index
+# This workflow scans the PACE structure and updates Second Brain stats
 # Runs on push to main, or manually via workflow_dispatch
 
-name: Update Second Brain Index
+name: Update Second Brain PACE
 
 on:
   push:
@@ -18,43 +18,40 @@ permissions:
   contents: write
 
 jobs:
-  update-index:
+  update-pace:
     runs-on: ubuntu-latest
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Scan vaults and update index
+      - name: Scan PACE structure
         run: |
-          echo "=== Scanning vaults ==="
+          echo "=== Scanning PACE structure ==="
           
-          # This is a simplified version for GitHub Actions
-          # The full PowerShell script runs locally
+          # Count files in each PACE category
+          PACE_DIRS=("00 Inbox" "01 Proyectos" "02 Áreas" "03 Conexiones - MOCs" "04 Extracciones AI" "05 Archivo")
+          TOTAL_FILES=0
           
-          VAULTS_DIR="${VAULTS_PATH:-/tmp/vaults}"
+          for dir in "${PACE_DIRS[@]}"; do
+            if [ -d "$dir" ]; then
+              COUNT=$(find "$dir" -name "*.md" -not -path "*/.obsidian/*" -not -path "*/.git/*" | wc -l)
+              echo "$dir: $COUNT files"
+              TOTAL_FILES=$((TOTAL_FILES + COUNT))
+            fi
+          done
           
-          # Count vaults (directories in vaults path)
-          if [ -d "$VAULTS_DIR" ]; then
-            VAULT_COUNT=$(find "$VAULTS_DIR" -maxdepth 1 -mindepth 1 -type d | wc -l)
-            TOTAL_FILES=$(find "$VAULTS_DIR" -name "*.md" -not -path "*/.obsidian/*" -not -path "*/.git/*" | wc -l)
-          else
-            VAULT_COUNT=0
-            TOTAL_FILES=0
-            echo "Vaults directory not found, using local scan"
-          fi
-          
-          echo "Vaults: $VAULT_COUNT"
-          echo "Total files: $TOTAL_FILES"
+          echo "Total PACE files: $TOTAL_FILES"
           
       - name: Update timestamp
         run: |
           DATE=$(date -u +"%Y-%m-%d %H:%M")
           echo "Last update: $DATE"
           
-          # Update the dashboard timestamp
-          if [ -f "00-Master-Dashboard/Dashboard.md" ]; then
-            sed -i "s/updated: .*/updated: $DATE/" "00-Master-Dashboard/Dashboard.md"
+          # Update the Home PACE timestamp
+          HOME_FILE="03 Conexiones - MOCs/030 ÍNDICE GENERAL (Home).md"
+          if [ -f "$HOME_FILE" ]; then
+            sed -i "s/updated: .*/updated: $DATE/" "$HOME_FILE"
           fi
 
       - name: Commit changes
@@ -68,6 +65,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "chore: auto-update Second Brain index [skip ci]"
+            git commit -m "chore: auto-update Second Brain PACE [skip ci]"
             git push
           fi

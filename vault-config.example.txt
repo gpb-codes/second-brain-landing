@@ -1,4 +1,0 @@
-# Archivo de ejemplo de configuracion del vault
-# Copia este archivo como 'vault-config.txt' y modifica la ruta
-# Ejemplo:
-D:\MiVaultMaestro

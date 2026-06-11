@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Sistema de notificaciones para Second Brain.
+    Sistema de notificaciones para Second Brain PACE.
 .DESCRIPTION
-    Alerta sobre updates pendientes, conflictos y vaults desactualizados.
+    Alerta sobre updates pendientes, conflictos y areas desactualizadas.
 .EXAMPLE
     .\notify.ps1
     .\notify.ps1 -CheckAll -Sound
@@ -18,7 +18,7 @@ param(
 $Date = Get-Date -Format "yyyy-MM-dd HH:mm"
 $alerts = @()
 
-Write-Host "=== Second Brain Notificaciones ===" -ForegroundColor Cyan
+Write-Host "=== Second Brain PACE Notificaciones ===" -ForegroundColor Cyan
 Write-Host "Fecha: $Date" -ForegroundColor Gray
 Write-Host ""
 
@@ -47,12 +47,13 @@ if ($local -ne $remote -and $LASTEXITCODE -eq 0) {
     }
 }
 
-# 3. Verificar vaults desactualizados
-Write-Host "Verificando vaults..." -ForegroundColor Yellow
-$vaultDirs = Get-ChildItem -Path "$VaultsPath\Vaults" -Directory -ErrorAction SilentlyContinue
+# 3. Verificar areas desactualizadas
+Write-Host "Verificando areas PACE..." -ForegroundColor Yellow
+$areasPath = Join-Path $VaultsPath "02 Áreas"
+$areaDirs = Get-ChildItem -Path $areasPath -Directory -ErrorAction SilentlyContinue
 
-foreach ($vault in $vaultDirs) {
-    $lastMod = Get-ChildItem -Path $vault.FullName -Recurse -Filter "*.md" -File |
+foreach ($area in $areaDirs) {
+    $lastMod = Get-ChildItem -Path $area.FullName -Recurse -Filter "*.md" -File |
         Where-Object { $_.FullName -notmatch '\\\.obsidian\\' } |
         Sort-Object LastWriteTime -Descending |
         Select-Object -First 1
@@ -62,7 +63,7 @@ foreach ($vault in $vaultDirs) {
         if ($daysSince -gt 30) {
             $alerts += [PSCustomObject]@{
                 Type = "WARNING"
-                Message = "Vault desactualizado: $($vault.Name)"
+                Message = "Area desactualizada: $($area.Name)"
                 Detail = "Ultima modificacion hace $daysSince dias"
             }
         }
@@ -82,14 +83,14 @@ if ($drive) {
     }
 }
 
-# 5. Verificar estructura de carpetas
-$requiredDirs = @("00-Master-Dashboard", "01-Vaults-Index", "Vaults", "scripts")
+# 5. Verificar estructura PACE
+$requiredDirs = @("00 Inbox", "01 Proyectos", "02 Áreas", "03 Conexiones - MOCs", "04 Extracciones AI", "05 Archivo", "99 Sistema", "scripts")
 foreach ($dir in $requiredDirs) {
     if (-not (Test-Path (Join-Path $VaultsPath $dir))) {
         $alerts += [PSCustomObject]@{
             Type = "ERROR"
-            Message = "Carpeta faltante: $dir"
-            Detail = "Ejecuta update-index.ps1 para recrearla"
+            Message = "Carpeta PACE faltante: $dir"
+            Detail = "Revisa la estructura del vault"
         }
     }
 }
@@ -121,7 +122,7 @@ if ($alerts.Count -eq 0) {
         $notify = New-Object System.Windows.Forms.NotifyIcon
         $notify.Icon = [System.Drawing.SystemIcons]::Warning
         $notify.Visible = $true
-        $notify.ShowBalloonTip(5000, "Second Brain", "$($alerts.Count) alertas encontradas", [System.Windows.Forms.ToolTipIcon]::Warning)
+        $notify.ShowBalloonTip(5000, "Second Brain PACE", "$($alerts.Count) alertas encontradas", [System.Windows.Forms.ToolTipIcon]::Warning)
     }
     
     # Sonido

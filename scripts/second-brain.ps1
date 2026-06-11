@@ -8,111 +8,74 @@
 #>
 
 param(
-    [string]$VaultsPath = "",
-    [string]$ScriptsPath = ""
+    [string]$VaultsPath = "D:\vaults\Second-Brain",
+    [string]$ScriptsPath = "D:\vaults\Second-Brain\scripts"
 )
-
-# Archivo de configuracion
-$ConfigFile = Join-Path $PSScriptRoot "..\vault-config.txt"
-
-# Funcion para cargar configuracion
-function Get-VaultConfig {
-    if (Test-Path -LiteralPath $ConfigFile) {
-        $savedPath = Get-Content -LiteralPath $ConfigFile -First 1 -ErrorAction SilentlyContinue
-        if ($savedPath -and (Test-Path -LiteralPath $savedPath)) {
-            return $savedPath.TrimEnd('\')
-        }
-    }
-    return $null
-}
-
-# Funcion para guardar configuracion
-function Set-VaultConfig {
-    param([string]$Path)
-    $Path.TrimEnd('\') | Out-File -LiteralPath $ConfigFile -Encoding UTF8 -Force
-}
-
-# Determinar ruta del vault
-if (-not $VaultsPath -or -not (Test-Path -LiteralPath $VaultsPath)) {
-    # Intentar cargar desde configuracion
-    $savedPath = Get-VaultConfig
-    if ($savedPath) {
-        $VaultsPath = $savedPath
-    } else {
-        # Usar directorio del script como fallback
-        $VaultsPath = Split-Path -Parent $PSScriptRoot
-        if (-not $VaultsPath) {
-            $VaultsPath = $PSScriptRoot
-        }
-    }
-}
-
-# Determinar ruta de scripts
-if (-not $ScriptsPath) {
-    $ScriptsPath = Join-Path $VaultsPath "scripts"
-}
 
 # Configuracion visual
 $Host.UI.RawUI.WindowTitle = "SECOND BRAIN - Neural Control Panel"
 
 # Limpiar rutas
-$VaultsPath = $VaultsPath.TrimEnd('\')
-$ScriptsPath = $ScriptsPath.TrimEnd('\')
+$VaultsPath = $VaultsPath.Trim('"').TrimEnd('\')
+$ScriptsPath = $ScriptsPath.Trim('"').TrimEnd('\')
 
 function Get-VaultStats {
-    $vaultsPath = Join-Path $VaultsPath "Vaults"
-    $vaults = Get-ChildItem -Path $vaultsPath -Directory -ErrorAction SilentlyContinue
+    $vaults = Get-ChildItem -Path "$VaultsPath\Vaults" -Directory -ErrorAction SilentlyContinue
     $totalFiles = 0
     foreach ($v in $vaults) {
         $totalFiles += (Get-ChildItem -Path $v.FullName -Filter "*.md" -Recurse -ErrorAction SilentlyContinue).Count
     }
-    return @{ Vaults = $vaults.Count; Files = $totalFiles; LastSync = (Get-Date -Format "HH:mm"); CurrentPath = $VaultsPath }
+    return @{ Vaults = $vaults.Count; Files = $totalFiles; LastSync = (Get-Date -Format "HH:mm") }
 }
 
 function Show-Header {
     $stats = Get-VaultStats
     Clear-Host
     Write-Host ""
-    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
-    Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-    Write-Host "  |     ####  ####  #    ####  ####  #    #    #  ####        |" -ForegroundColor Magenta
-    Write-Host "  |     #  #  #  #  #    #     #     #    #    #  #           |" -ForegroundColor Magenta
-    Write-Host "  |     ####  ####  #    ###   ###   #    #    #  ####        |" -ForegroundColor Magenta
-    Write-Host "  |     #     #  #  #    #     #     #    #    #      #       |" -ForegroundColor Magenta
-    Write-Host "  |     #     #  #  #    ####  ####  ####  ####  ####         |" -ForegroundColor Magenta
-    Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-    Write-Host "  |       S E C O N D   B R A I N   -   C O N T R O L        |" -ForegroundColor DarkCyan
-    Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host ""
+    Write-Host "  ######            ##      ##  ######    ########" -ForegroundColor Green
+    Write-Host "  ######            ##      ##  ######    ########" -ForegroundColor Green
+    Write-Host "  ##      ##            ##  ##      ##    ##" -ForegroundColor Green
+    Write-Host "  ##      ##            ##  ##      ##    ##" -ForegroundColor Green
+    Write-Host "  ##########              ##        ##      ######" -ForegroundColor Green
+    Write-Host "  ##########              ##        ##      ######" -ForegroundColor Green
+    Write-Host "  ##      ##    ##      ##  ##      ##            ##" -ForegroundColor Green
+    Write-Host "  ##      ##    ##      ##  ##      ##            ##" -ForegroundColor Green
+    Write-Host "  ##      ##    ##    ##      ##  ######  ########" -ForegroundColor Green
+    Write-Host "  ##      ##    ##    ##      ##  ######  ########" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "        S E C O N D   B R A I N   -   C O N T R O L" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
     Write-Host ""
     Write-Host "  +----------------------------------------------------------+" -ForegroundColor DarkGray
     Write-Host "  |  Vaults: $($stats.Vaults)    |    Archivos: $($stats.Files)    |    Sync: $($stats.LastSync)    |" -ForegroundColor Gray
-    Write-Host "  |  Ruta: $($stats.CurrentPath)" -ForegroundColor DarkGray
     Write-Host "  +----------------------------------------------------------+" -ForegroundColor DarkGray
     Write-Host ""
 }
 
 function Show-Menu {
-    Write-Host "  +--- GESTION ----------------------------------------------+" -ForegroundColor DarkCyan
-    Write-Host "  |                                                           |" -ForegroundColor DarkCyan
+    Write-Host "  +--- GESTION ----------------------------------------------+" -ForegroundColor DarkGreen
+    Write-Host "  |                                                           |" -ForegroundColor DarkGreen
     Write-Host "  |  [1]  Actualizar Dashboard          [5]  Crear Vault     |" -ForegroundColor White
     Write-Host "  |  [2]  Buscar Contenido              [6]  Crear Backup    |" -ForegroundColor White
     Write-Host "  |  [3]  Ver Estadisticas              [7]  Exportar HTML    |" -ForegroundColor White
     Write-Host "  |  [4]  Setup Wizard                  [8]  Mobile Sync     |" -ForegroundColor White
+    Write-Host "  |                                                           |" -ForegroundColor DarkGreen
+    Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkGreen
+    Write-Host ""
+    Write-Host "  +--- INTELIGENCIA -----------------------------------------+" -ForegroundColor DarkCyan
+    Write-Host "  |                                                           |" -ForegroundColor DarkCyan
+    Write-Host "  |  [C]  OpenCode + Skill       [A]  Asistente IA           |" -ForegroundColor Cyan
     Write-Host "  |                                                           |" -ForegroundColor DarkCyan
     Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkCyan
     Write-Host ""
-    Write-Host "  +--- INTELIGENCIA -----------------------------------------+" -ForegroundColor DarkMagenta
-    Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-    Write-Host "  |  [C]  OpenCode + Skill       [A]  Asistente IA           |" -ForegroundColor Magenta
-    Write-Host "  |  [Y]  Configurar IAs         [P]  Prompt con IA          |" -ForegroundColor Magenta
-    Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-    Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkMagenta
-    Write-Host ""
     Write-Host "  +--- INTEGRACIONES ----------------------------------------+" -ForegroundColor DarkYellow
     Write-Host "  |                                                           |" -ForegroundColor DarkYellow
-    Write-Host "  |  [G]  Git Push a GitHub             [N]  Notificaciones  |" -ForegroundColor Yellow
-    Write-Host "  |  [I]  Integraciones                 [J]  Plugins         |" -ForegroundColor Yellow
+    Write-Host "  |  [G]  Git Push a GitHub             [P]  Git Pull        |" -ForegroundColor Yellow
+    Write-Host "  |  [I]  Integraciones                 [N]  Notificaciones |" -ForegroundColor Yellow
+    Write-Host "  |  [E]  Configurar Repositorio       [L]  Plugins         |" -ForegroundColor Yellow
     Write-Host "  |                                                           |" -ForegroundColor DarkYellow
     Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkYellow
     Write-Host ""
@@ -120,7 +83,6 @@ function Show-Menu {
     Write-Host "  |                                                           |" -ForegroundColor DarkGreen
     Write-Host "  |  [O]  Abrir en Obsidian             [V]  Ver Vaults      |" -ForegroundColor Green
     Write-Host "  |  [R]  Abrir Carpeta Raiz            [L]  Log Actividad   |" -ForegroundColor Green
-    Write-Host "  |  [S]  Configurar Ruta Vault         [D]  Ruta Default    |" -ForegroundColor Green
     Write-Host "  |                                                           |" -ForegroundColor DarkGreen
     Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkGreen
     Write-Host ""
@@ -193,344 +155,12 @@ function Run-Script {
     }
 }
 
-# Configuracion de IAs
-$AIConfigFile = Join-Path $VaultsPath "ai-config.json"
-
-$DefaultAIConfig = @{
-    IAs = @(
-        @{ Name = "OpenCode"; Enabled = $true; Command = "opencode"; Args = @("--prompt") }
-        @{ Name = "Claude"; Enabled = $false; Command = "claude"; Args = @("-p") }
-        @{ Name = "Grok"; Enabled = $false; Command = "grok"; Args = @("--ask") }
-        @{ Name = "NotebookLM"; Enabled = $false; Command = "notebooklm"; Args = @() }
-        @{ Name = "ChatGPT"; Enabled = $false; Command = "chatgpt"; Args = @("--prompt") }
-        @{ Name = "Copilot"; Enabled = $false; Command = "copilot"; Args = @("--ask") }
-        @{ Name = "Gemini"; Enabled = $false; Command = "gemini"; Args = @("--prompt") }
-    )
-    ModoTrabajo = "individual"  # individual, tandem, o equipo
-}
-
-function Get-AIConfig {
-    if (Test-Path -LiteralPath $AIConfigFile) {
-        try {
-            $config = Get-Content -LiteralPath $AIConfigFile -Raw | ConvertFrom-Json
-            return $config
-        } catch {
-            return $DefaultAIConfig
-        }
-    }
-    return $DefaultAIConfig
-}
-
-function Save-AIConfig {
-    param([hashtable]$Config)
-    $Config | ConvertTo-Json -Depth 10 | Out-File -LiteralPath $AIConfigFile -Encoding UTF8 -Force
-}
-
-function Get-ActiveIAs {
-    $config = Get-AIConfig
-    return $config.IAs | Where-Object { $_.Enabled -eq $true }
-}
-
-function Invoke-AI {
-    param(
-        [string]$Prompt,
-        [string]$Mode = "single"  # single, tandem, team
-    )
-    
-    $config = Get-AIConfig
-    $activeIAs = $config.IAs | Where-Object { $_.Enabled -eq $true }
-    
-    if ($activeIAs.Count -eq 0) {
-        Write-Host "  [!] No hay IAs configuradas. Usa [Y] para configurar." -ForegroundColor Yellow
-        return
-    }
-    
-    Write-Host ""
-    Write-Host "  Enviando prompt a $($activeIAs.Count) IA(s)..." -ForegroundColor Cyan
-    Write-Host ""
-    
-    switch ($Mode) {
-        "single" {
-            # Ejecutar IA individual (la primera activa)
-            $ia = $activeIAs | Select-Object -First 1
-            Write-Host "  [$($ia.Name)] Procesando..." -ForegroundColor Magenta
-            if ($ia.Command -eq "opencode") {
-                & opencode --prompt $Prompt
-            } else {
-                Write-Host "  [!] Komando '$($ia.Command)' belum terinstal atau tidak didukung." -ForegroundColor Yellow
-            }
-        }
-        "tandem" {
-            # Ejecutar 2 IAs en tandem
-            $selectedIAs = $activeIAs | Select-Object -First 2
-            foreach ($ia in $selectedIAs) {
-                Write-Host "  [$($ia.Name)] Procesando en paralelo..." -ForegroundColor Magenta
-            }
-            Write-Host ""
-            Write-Host "  Modo tandem: Las IAs trabajan en el mismo prompt." -ForegroundColor Gray
-            # Aqui iria la logica para ejecutar en paralelo
-        }
-        "team" {
-            # Ejecutar todas las IAs como equipo
-            Write-Host "  Modo equipo: Todas las IAs colaboran." -ForegroundColor Gray
-            foreach ($ia in $activeIAs) {
-                Write-Host "  [$($ia.Name)] Listo para procesar." -ForegroundColor Magenta
-            }
-        }
-    }
-}
-
-function Show-AIConfigMenu {
-    Clear-Host
-    $config = Get-AIConfig
-    
-    Write-Host ""
-    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
-    Write-Host "    CONFIGURACION DE INTELIGENCIA ARTIFICIAL" -ForegroundColor Magenta
-    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
-    Write-Host ""
-    Write-Host "  Modo de trabajo actual: $($config.ModoTrabajo.ToUpper())" -ForegroundColor Cyan
-    Write-Host ""
-    
-    Write-Host "  +--- IAs DISPONIBLES -------------------------------------+" -ForegroundColor DarkMagenta
-    Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-    
-    $i = 1
-    foreach ($ia in $config.IAs) {
-        $status = if ($ia.Enabled) { "[X]" } else { "[ ]" }
-        $color = if ($ia.Enabled) { "Green" } else { "Gray" }
-        Write-Host "  |  [$i]  $status $($ia.Name.PadRight(20))" -ForegroundColor $color -NoNewline
-        if ($i % 2 -eq 0) {
-            Write-Host "  |" -ForegroundColor DarkMagenta
-        } else {
-            Write-Host ""
-        }
-        $i++
-    }
-    
-    if ($i % 2 -eq 0) {
-        Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-    }
-    
-    Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkMagenta
-    Write-Host ""
-    Write-Host "  +--- MODO DE TRABAJO --------------------------------------+" -ForegroundColor DarkCyan
-    Write-Host "  |                                                           |" -ForegroundColor DarkCyan
-    Write-Host "  |  [T]  Individual  - Una IA a la vez                      |" -ForegroundColor White
-    Write-Host "  |  [U]  Tandem      - 2 IAs trabajan juntas                |" -ForegroundColor White
-    Write-Host "  |  [E]  Equipo      - Todas las IAs colaboran              |" -ForegroundColor White
-    Write-Host "  |                                                           |" -ForegroundColor DarkCyan
-    Write-Host "  +-----------------------------------------------------------+" -ForegroundColor DarkCyan
-    Write-Host ""
-    Write-Host "  [Y]  Probar IAs seleccionadas        [V]  Volver al menu" -ForegroundColor DarkYellow
-    Write-Host ""
-    
-    $choice = Read-Host "  Selecciona"
-    
-    switch ($choice.ToUpper()) {
-        { $_ -match '^[1-7]$' } {
-            $index = [int]$choice - 1
-            $config.IAs[$index].Enabled = -not $config.IAs[$index].Enabled
-            Save-AIConfig -Config $config
-            $status = if ($config.IAs[$index].Enabled) { "activada" } else { "desactivada" }
-            Write-Host ""
-            Write-Host "  [OK] $($config.IAs[$index].Name) $status" -ForegroundColor Green
-            Start-Sleep -Seconds 1
-            Show-AIConfigMenu
-        }
-        "T" {
-            $config.ModoTrabajo = "individual"
-            Save-AIConfig -Config $config
-            Write-Host ""
-            Write-Host "  [OK] Modo individual activado" -ForegroundColor Green
-            Start-Sleep -Seconds 1
-            Show-AIConfigMenu
-        }
-        "U" {
-            $config.ModoTrabajo = "tandem"
-            Save-AIConfig -Config $config
-            Write-Host ""
-            Write-Host "  [OK] Modo tandem activado" -ForegroundColor Green
-            Start-Sleep -Seconds 1
-            Show-AIConfigMenu
-        }
-        "E" {
-            $config.ModoTrabajo = "equipo"
-            Save-AIConfig -Config $config
-            Write-Host ""
-            Write-Host "  [OK] Modo equipo activado" -ForegroundColor Green
-            Start-Sleep -Seconds 1
-            Show-AIConfigMenu
-        }
-        "Y" {
-            $prompt = Read-Host "  Ingresa el prompt para probar"
-            if ($prompt) {
-                Invoke-AI -Prompt $prompt -Mode $config.ModoTrabajo
-            }
-            Write-Host ""
-            Write-Host "  Presiona Enter para volver..." -ForegroundColor DarkGray
-            Read-Host
-            Show-AIConfigMenu
-        }
-        "V" {
-            return
-        }
-        default {
-            Write-Host "  Opcion no valida" -ForegroundColor Yellow
-            Start-Sleep -Seconds 1
-            Show-AIConfigMenu
-        }
-    }
-}
-
-function Set-VaultPath {
-    Clear-Host
-    Write-Host ""
-    Write-Host "  ============================================================" -ForegroundColor DarkGreen
-    Write-Host "    CONFIGURAR RUTA DEL VAULT MAESTRO" -ForegroundColor Green
-    Write-Host "  ============================================================" -ForegroundColor DarkGreen
-    Write-Host ""
-    Write-Host "  Ruta actual: $VaultsPath" -ForegroundColor Cyan
-    Write-Host ""
-    Write-Host "  [1]  Ingresar nueva ruta manualmente" -ForegroundColor White
-    Write-Host "  [2]  Seleccionar carpeta con dialogo" -ForegroundColor White
-    Write-Host "  [3]  Buscar vaults automaticamente" -ForegroundColor White
-    Write-Host "  [4]  Volver al menu principal" -ForegroundColor White
-    Write-Host ""
-    
-    $configChoice = Read-Host "  Selecciona"
-    
-    switch ($configChoice) {
-        "1" {
-            Write-Host ""
-            $newPath = Read-Host "  Ingresa la nueva ruta del vault"
-            if ($newPath -and (Test-Path -LiteralPath $newPath)) {
-                $script:VaultsPath = $newPath.TrimEnd('\')
-                $script:ScriptsPath = Join-Path $script:VaultsPath "scripts"
-                Set-VaultConfig -Path $script:VaultsPath
-                Write-Host ""
-                Write-Host "  [OK] Ruta configurada: $($script:VaultsPath)" -ForegroundColor Green
-            } else {
-                Write-Host ""
-                Write-Host "  [!] La ruta no existe o es invalida." -ForegroundColor Red
-            }
-            Start-Sleep -Seconds 2
-        }
-        "2" {
-            Write-Host ""
-            Write-Host "  Abriendo dialogo de seleccion..." -ForegroundColor Cyan
-            Add-Type -AssemblyName System.Windows.Forms
-            $folderDialog = New-Object System.Windows.Forms.FolderBrowserDialog
-            $folderDialog.Description = "Selecciona tu Vault Maestro"
-            $folderDialog.ShowNewFolderButton = $false
-            
-            if ($folderDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-                $script:VaultsPath = $folderDialog.SelectedPath.TrimEnd('\')
-                $script:ScriptsPath = Join-Path $script:VaultsPath "scripts"
-                Set-VaultConfig -Path $script:VaultsPath
-                Write-Host ""
-                Write-Host "  [OK] Ruta configurada: $($script:VaultsPath)" -ForegroundColor Green
-            } else {
-                Write-Host ""
-                Write-Host "  Operacion cancelada." -ForegroundColor Yellow
-            }
-            Start-Sleep -Seconds 2
-        }
-        "3" {
-            Search-AutoVaults
-        }
-        "4" {
-            return
-        }
-    }
-}
-
-function Search-AutoVaults {
-    Clear-Host
-    Write-Host ""
-    Write-Host "  ============================================================" -ForegroundColor DarkGreen
-    Write-Host "    BUSQUEDA AUTOMATICA DE VAULTS" -ForegroundColor Green
-    Write-Host "  ============================================================" -ForegroundColor DarkGreen
-    Write-Host ""
-    Write-Host "  Buscando vaults en ubicaciones comunes..." -ForegroundColor Cyan
-    Write-Host ""
-    
-    $searchPaths = @(
-        "$env:USERPROFILE\Documents\Vaults",
-        "$env:USERPROFILE\OneDrive\Vaults",
-        "D:\Vaults",
-        "D:\Obsidian",
-        "$env:USERPROFILE\Documents\Obsidian",
-        "$env:USERPROFILE\Desktop\Vaults",
-        "$env:USERPROFILE\Dropbox\Vaults"
-    )
-    
-    $foundPaths = @()
-    
-    foreach ($path in $searchPaths) {
-        if (Test-Path -LiteralPath $path -PathType Container) {
-            Write-Host "  [+] Encontrado: $path" -ForegroundColor Green
-            $foundPaths += $path
-            
-            # Buscar subcarpetas que puedan ser vaults
-            $subDirs = Get-ChildItem -Path $path -Directory -ErrorAction SilentlyContinue | 
-                Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "*.md") -ErrorAction SilentlyContinue } |
-                Select-Object -First 3
-            
-            foreach ($sub in $subDirs) {
-                Write-Host "      - $($sub.Name)" -ForegroundColor Gray
-            }
-        }
-    }
-    
-    Write-Host ""
-    
-    if ($foundPaths.Count -eq 0) {
-        Write-Host "  No se encontraron vaults en las rutas comunes." -ForegroundColor Yellow
-        Write-Host "  Intenta ingresar la ruta manualmente." -ForegroundColor Yellow
-    } else {
-        Write-Host "  Se encontraron $($foundPaths.Count) posibles ubicaciones." -ForegroundColor Green
-        Write-Host ""
-        $select = Read-Host "  Selecciona una ruta (numero) o Enter para cancelar"
-        
-        if ($select -match '^\d+$' -and [int]$select -ge 1 -and [int]$select -le $foundPaths.Count) {
-            $selectedIndex = [int]$select - 1
-            $script:VaultsPath = $foundPaths[$selectedIndex].TrimEnd('\')
-            $script:ScriptsPath = Join-Path $script:VaultsPath "scripts"
-            Set-VaultConfig -Path $script:VaultsPath
-            Write-Host ""
-            Write-Host "  [OK] Ruta configurada: $($script:VaultsPath)" -ForegroundColor Green
-        }
-    }
-    
-    Start-Sleep -Seconds 2
-}
-
-function Reset-VaultPath {
-    $script:VaultsPath = Split-Path -Parent $PSScriptRoot
-    if (-not $script:VaultsPath) {
-        $script:VaultsPath = $PSScriptRoot
-    }
-    $script:ScriptsPath = Join-Path $script:VaultsPath "scripts"
-    Set-VaultConfig -Path $script:VaultsPath
-    
-    Clear-Host
-    Write-Host ""
-    Write-Host "  ============================================================" -ForegroundColor DarkGreen
-    Write-Host "    RUTA RESTAURADA" -ForegroundColor Green
-    Write-Host "  ============================================================" -ForegroundColor DarkGreen
-    Write-Host ""
-    Write-Host "  Ruta por defecto: $($script:VaultsPath)" -ForegroundColor Cyan
-    Write-Host ""
-    Start-Sleep -Seconds 2
-}
-
 function Start-OpenCodeWithSkill {
     Clear-Host
     Write-Host ""
-    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
-    Write-Host "    OPENCODE + SKILL" -ForegroundColor Magenta
-    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host "    OPENCODE + SKILL" -ForegroundColor Green
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
     Write-Host ""
     Write-Host "  Iniciando OpenCode con skill de Second Brain..." -ForegroundColor Cyan
     Write-Host ""
@@ -573,9 +203,9 @@ function Start-OpenCodeWithSkill {
 function Start-AsistenteIA {
     Clear-Host
     Write-Host ""
-    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
-    Write-Host "    ASISTENTE IA" -ForegroundColor Magenta
-    Write-Host "  ============================================================" -ForegroundColor DarkMagenta
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
+    Write-Host "    ASISTENTE IA" -ForegroundColor Green
+    Write-Host "  ============================================================" -ForegroundColor DarkGreen
     Write-Host ""
     Write-Host "  Selecciona una accion:" -ForegroundColor Cyan
     Write-Host ""
@@ -661,6 +291,9 @@ do {
         "C" {
             Start-OpenCodeWithSkill
         }
+        "E" {
+            Run-Script "configure-repo.ps1" "Configurar Repositorio"
+        }
         "A" {
             Start-AsistenteIA
         }
@@ -677,6 +310,16 @@ do {
             Write-Activity "Git push: $msg"
             Write-Host ""
             Write-Host "  [OK] Cambios subidos a GitHub" -ForegroundColor Green
+        }
+        "P" {
+            Write-Host ""
+            Write-Host "  Obteniendo cambios de GitHub..." -ForegroundColor Cyan
+            Push-Location $VaultsPath
+            git pull origin main 2>&1
+            Pop-Location
+            Write-Activity "Git pull"
+            Write-Host ""
+            Write-Host "  [OK] Cambios actualizados" -ForegroundColor Green
         }
         "I" {
             Clear-Host
@@ -708,18 +351,6 @@ do {
                 Write-Host "  Archivo no encontrado" -ForegroundColor Red
             }
         }
-        "Y" {
-            Show-AIConfigMenu
-        }
-        "J" {
-            $pluginsFile = Join-Path $VaultsPath "05-Templates\Plugins-Recomendados.md"
-            if (Test-Path $pluginsFile) {
-                Clear-Host
-                Get-Content $pluginsFile | Write-Host
-            } else {
-                Write-Host "  Archivo no encontrado" -ForegroundColor Red
-            }
-        }
         "O" {
             Start-Process "obsidian://open?vault=Second-Brain"
             Write-Host "  Abriendo Obsidian..." -ForegroundColor Green
@@ -736,19 +367,13 @@ do {
         "L" {
             Show-ActivityLog
         }
-        "S" {
-            Set-VaultPath
-        }
-        "D" {
-            Reset-VaultPath
-        }
         "X" {
             Write-Host ""
-            Write-Host "  ============================================================" -ForegroundColor DarkMagenta
-            Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-            Write-Host "  |       Hasta luego. El conocimiento es poder.              |" -ForegroundColor Magenta
-            Write-Host "  |                                                           |" -ForegroundColor DarkMagenta
-            Write-Host "  ============================================================" -ForegroundColor DarkMagenta
+            Write-Host "  ============================================================" -ForegroundColor DarkGreen
+            Write-Host "  |                                                           |" -ForegroundColor DarkGreen
+            Write-Host "  |       Hasta luego. El conocimiento es poder.              |" -ForegroundColor Green
+            Write-Host "  |                                                           |" -ForegroundColor DarkGreen
+            Write-Host "  ============================================================" -ForegroundColor DarkGreen
             Write-Host ""
         }
         default {

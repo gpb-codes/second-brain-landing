@@ -91,7 +91,7 @@ export default function Home() {
           <div className={`grid grid-cols-3 gap-8 mt-20 max-w-2xl mx-auto transition-all duration-1000 delay-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
             {[
               { value: "6+", label: "Vaults Conectados", color: "#8B5CF6" },
-              { value: "172", label: "Archivos Index", color: "#3B82F6" },
+              { value: "32", label: "Archivos Index", color: "#3B82F6" },
               { value: "Auto", label: "GitHub Sync", color: "#22C55E" },
             ].map((stat, i) => (
               <div 
@@ -175,12 +175,12 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { name: "Acceso-Remoto-PC", desc: "VPN, RDP, Seguridad", files: 60, color: "#8B5CF6" },
-              { name: "Agentes-IA-Gratis", desc: "Dashboard, Overview", files: 25, color: "#3B82F6" },
-              { name: "LinkedIn Brand", desc: "Personal Branding", files: 67, color: "#22C55E" },
-              { name: "Recursos-Gratis", desc: "APIs, Hosting, Recursos", files: 15, color: "#8B5CF6" },
-              { name: "GUI-Vault", desc: "Arc-Reactor, Visualizaciones", files: 8, color: "#3B82F6" },
-              { name: "Social-Network", desc: "Redes Sociales, Microservicios", files: 15, color: "#22C55E" },
+              { name: "DevOps-Vault", desc: "Docker, CI/CD, Kubernetes", files: 8, color: "#8B5CF6" },
+              { name: "Branding-Vault", desc: "Identidad, Plantillas, Contenido", files: 10, color: "#3B82F6" },
+              { name: "Learning-Vault", desc: "Cursos, Tutoriales, Recursos", files: 12, color: "#22C55E" },
+              { name: "Finanzas-Vault", desc: "Presupuestos, Inversiones", files: 8, color: "#8B5CF6" },
+              { name: "Salud-Vault", desc: "Fitness, Nutrición, Bienestar", files: 10, color: "#3B82F6" },
+              { name: "Productividad-Vault", desc: "GTD, Herramientas, System", files: 12, color: "#22C55E" },
             ].map((vault, i) => (
               <div 
                 key={i}

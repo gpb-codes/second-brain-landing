@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#22C55E;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="180" height="180" rx="40" fill="#0F172A"/>
+  <path d="M90 35 C62 35 45 52 45 72 C45 92 62 105 90 115 C118 105 135 92 135 72 C135 52 118 35 90 35Z" fill="none" stroke="url(#grad)" stroke-width="5"/>
+  <circle cx="62" cy="68" r="10" fill="#8B5CF6"/>
+  <circle cx="90" cy="58" r="10" fill="#3B82F6"/>
+  <circle cx="118" cy="68" r="10" fill="#22C55E"/>
+  <circle cx="75" cy="92" r="8" fill="#F59E0B"/>
+  <circle cx="105" cy="92" r="8" fill="#EC4899"/>
+  <line x1="62" y1="68" x2="90" y2="58" stroke="#64748B" stroke-width="3"/>
+  <line x1="90" y1="58" x2="118" y2="68" stroke="#64748B" stroke-width="3"/>
+  <line x1="62" y1="68" x2="75" y2="92" stroke="#64748B" stroke-width="3"/>
+  <line x1="118" y1="68" x2="105" y2="92" stroke="#64748B" stroke-width="3"/>
+  <line x1="75" y1="92" x2="105" y2="92" stroke="#64748B" stroke-width="3"/>
+  <text x="90" y="140" text-anchor="middle" fill="white" font-family="sans-serif" font-size="18" font-weight="bold">SECOND BRAIN</text>
+</svg>

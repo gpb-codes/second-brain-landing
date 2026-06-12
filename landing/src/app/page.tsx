@@ -289,16 +289,14 @@ export default function Home() {
             <h3 className="text-2xl font-bold mb-8 text-white font-heading text-center">Asistentes de IA</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { name: "ChatGPT", icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z", color: "#10A37F" },
-                { name: "Claude", icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z", color: "#D97706" },
-                { name: "Gemini", icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z", color: "#4285F4" },
-                { name: "Copilot", icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z", color: "#00A4EF" },
+                { name: "ChatGPT", url: "https://simpleicons.org/icons/openai.svg", color: "#10A37F" },
+                { name: "Claude", url: "https://simpleicons.org/icons/anthropic.svg", color: "#D97706" },
+                { name: "Gemini", url: "https://simpleicons.org/icons/googlegemini.svg", color: "#4285F4" },
+                { name: "Copilot", url: "https://simpleicons.org/icons/githubcopilot.svg", color: "#00A4EF" },
               ].map((ai, i) => (
-                <div key={i} className="p-4 rounded-xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 cursor-pointer text-center">
-                  <div className="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ backgroundColor: `${ai.color}20` }}>
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke={ai.color}>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ai.icon} />
-                    </svg>
+                <div key={i} className="p-4 rounded-xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 cursor-pointer text-center group">
+                  <div className="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center bg-slate-700/50 group-hover:bg-slate-600/50 transition-colors">
+                    <img src={ai.url} alt={ai.name} className="w-6 h-6" style={{ filter: "brightness(0) invert(1)" }} />
                   </div>
                   <span className="text-sm font-medium text-white font-body">{ai.name}</span>
                 </div>
@@ -311,19 +309,19 @@ export default function Home() {
             <h3 className="text-2xl font-bold mb-8 text-white font-heading text-center">Aplicaciones Compatibles</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { name: "Obsidian", desc: "Vault Manager", color: "#7C3AED" },
-                { name: "GitHub", desc: "Version Control", color: "#F8FAFC" },
-                { name: "VS Code", desc: "Editor", color: "#007ACC" },
-                { name: "Notion", desc: "Export", color: "#F8FAFC" },
-                { name: "Slack", desc: "Notificaciones", color: "#4A154B" },
-                { name: "Discord", desc: "Alertas", color: "#5865F2" },
-                { name: "Telegram", desc: "Push Alerts", color: "#0088CC" },
-                { name: "Cloudflare", desc: "Deploy", color: "#F48120" },
+                { name: "Obsidian", desc: "Vault Manager", url: "https://simpleicons.org/icons/obsidian.svg", color: "#7C3AED" },
+                { name: "GitHub", desc: "Version Control", url: "https://simpleicons.org/icons/github.svg", color: "#F8FAFC" },
+                { name: "VS Code", desc: "Editor", url: "https://simpleicons.org/icons/visualstudio.svg", color: "#007ACC" },
+                { name: "Notion", desc: "Export", url: "https://simpleicons.org/icons/notion.svg", color: "#F8FAFC" },
+                { name: "Slack", desc: "Notificaciones", url: "https://simpleicons.org/icons/slack.svg", color: "#4A154B" },
+                { name: "Discord", desc: "Alertas", url: "https://simpleicons.org/icons/discord.svg", color: "#5865F2" },
+                { name: "Telegram", desc: "Push Alerts", url: "https://simpleicons.org/icons/telegram.svg", color: "#0088CC" },
+                { name: "Cloudflare", desc: "Deploy", url: "https://simpleicons.org/icons/cloudflare.svg", color: "#F48120" },
               ].map((app, i) => (
-                <div key={i} className="p-4 rounded-xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 cursor-pointer">
+                <div key={i} className="p-4 rounded-xl bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 cursor-pointer group">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${app.color}20` }}>
-                      <span className="text-lg font-bold font-heading" style={{ color: app.color }}>{app.name[0]}</span>
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-slate-700/50 group-hover:bg-slate-600/50 transition-colors">
+                      <img src={app.url} alt={app.name} className="w-5 h-5" style={{ filter: "brightness(0) invert(1)" }} />
                     </div>
                     <div>
                       <div className="text-sm font-medium text-white font-body">{app.name}</div>
@@ -526,27 +524,60 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-slate-800">
+      <footer className="py-16 border-t border-slate-800 bg-slate-900/50">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            {/* Brand */}
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
+                  <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <span className="font-bold text-2xl text-white font-heading">Second Brain</span>
               </div>
-              <span className="font-bold text-white font-heading">Second Brain</span>
+              <p className="text-slate-400 font-body max-w-md mb-6">
+                Tu hub maestro de conocimiento. Centraliza todos tus vaults de Obsidian con auto-actualizacion y sincronizacion con GitHub.
+              </p>
+              <div className="flex items-center gap-4">
+                <a href="https://github.com/gpb-codes/second-brain-landing" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                  </svg>
+                </a>
+              </div>
             </div>
-            <div className="flex items-center gap-6">
-              <a href="https://github.com/gpb-codes/second-brain-landing" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors cursor-pointer">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                </svg>
-              </a>
+
+            {/* Links */}
+            <div>
+              <h4 className="text-white font-semibold mb-4 font-heading">Producto</h4>
+              <ul className="space-y-3">
+                <li><a href="#features" className="text-slate-400 hover:text-white transition-colors font-body">Features</a></li>
+                <li><a href="#vaults" className="text-slate-400 hover:text-white transition-colors font-body">Vaults</a></li>
+                <li><a href="#setup" className="text-slate-400 hover:text-white transition-colors font-body">Setup</a></li>
+                <li><a href="#roadmap" className="text-slate-400 hover:text-white transition-colors font-body">Roadmap</a></li>
+              </ul>
             </div>
+
+            <div>
+              <h4 className="text-white font-semibold mb-4 font-heading">Recursos</h4>
+              <ul className="space-y-3">
+                <li><a href="https://github.com/gpb-codes/second-brain-landing" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors font-body">GitHub</a></li>
+                <li><a href="https://obsidian.md" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors font-body">Obsidian</a></li>
+                <li><a href="https://docs.github.com/en/actions" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors font-body">GitHub Actions</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-slate-500 font-body">
               Hecho para organizar el conocimiento. MIT License.
             </p>
+            <div className="flex items-center gap-2 text-sm text-slate-500 font-body">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Sistema activo
+            </div>
           </div>
         </div>
       </footer>

@@ -1,15 +1,15 @@
-﻿---
+---
 title: "Second Brain - Dashboard Maestro"
 aliases: [dashboard, master, hub, inicio]
 tags: [second-brain, dashboard, master]
 created: 2026-06-09
-updated: 2026-06-11 02:52
+updated: 2026-06-11
 ---
 
 # Second Brain - Hub Maestro
 
 > [!info] Centro de control universal
-> Este vault conecta y indexa todos tus vaults de Obsidian. Se actualiza automaticamente cuando se crea un vault nuevo.
+> Este vault organiza tu conocimiento con la metodologia PACE.
 
 ---
 
@@ -17,87 +17,129 @@ updated: 2026-06-11 02:52
 
 | Metrica | Valor |
 |---------|-------|
-| Vaults totales | **6** |
-| Total archivos .md | **32** |
-| Ultimo scan | 2026-06-10 |
+| Total archivos .md | **125** |
+| Ultimo scan | 2026-06-11 |
 | Auto-update | Activo |
-| GitHub | gpb-codes/second-brain-landing |
+| GitHub | gpb-codes/Second-Brain |
 
 ---
 
-## Vaults Indexados
+## Estructura PACE
 
-### DevOps-Vault
-> [!tip] Docker, CI/CD, Kubernetes, Monitoring
-> Vault con 8 archivos en 4 categorias.
+### 00 Inbox
+> [!tip] Captura rapida
+> 1 archivo - Bandeja de entrada para ideas rapidas.
 
-| Metrica | Valor |
-|---------|-------|
-| Archivos | 8 |
-| Carpetas | 4 |
-| Tags | docker, kubernetes, github-actions, monitoring |
+| Archivo | Descripcion |
+|---------|-------------|
+| Nota rapida del dia | Captura diaria |
 
-**Ruta:** `Vaults/DevOps-Vault`
+---
 
-### Branding-Vault
-> [!tip] Identidad, Plantillas, Contenido, Campañas
-> Vault con 10 archivos en 4 categorias.
+### 01 Proyectos
+> [!tip] Iniciativas con deadline
+> 2 carpetas - Activos y En Pausa.
 
-| Metrica | Valor |
-|---------|-------|
-| Archivos | 10 |
-| Carpetas | 4 |
-| Tags | branding, logo, diseno, marketing |
+| Carpeta | Estado |
+|---------|--------|
+| Activos | Vacia |
+| En Pausa | Vacia |
 
-**Ruta:** `Vaults/Branding-Vault`
+---
 
-### Learning-Vault
-> [!tip] Cursos, Tutoriales, Recursos, Certificaciones
-> Vault con 12 archivos en 4 categorias.
+### 02 Areas
+> [!tip] Responsabilidades continuas
+> 5 carpetas - LinkedIn y AWS activos.
 
-| Metrica | Valor |
-|---------|-------|
-| Archivos | 12 |
-| Carpetas | 4 |
-| Tags | cursos, tutoriales, certifications |
+#### LinkedIn Personal Brand
+> [!success] 67 archivos en 13 categorias
 
-**Ruta:** `Vaults/Learning-Vault`
+| Categoria | Archivos | Descripcion |
+|-----------|----------|-------------|
+| Carruseles | 3 | Estructura, guiones, ideas |
+| Empleabilidad | 5 | CV, elevator pitch, entrevistas |
+| Estrategia | 5 | Calendario, objetivos, pilares |
+| GitHub | 6 | Perfil, documentacion, repos |
+| Instagram | 8 | Bio, calendario, hashtags, reels |
+| Networking | 4 | Mensajes, seguimiento |
+| Perfil | 5 | Acerca de, habilidades, SEO |
+| Proyectos | 4 | Casos de estudio, open source |
+| Publicaciones | 10 | Posts 01-10 |
+| Recursos | 8 | Formulas, hooks, plantillas |
+| YouTube | 7 | Estrategia, guiones, produccion |
+| Indice | 1 | Guia inicio rapido |
+| General | 1 | Indice del vault |
 
-### Finanzas-Vault
-> [!tip] Presupuestos, Inversiones, Ahorro, Impuestos
-> Vault con 8 archivos en 4 categorias.
+#### AWS - Amazon Web Services
+> [!success] 32 archivos - Guia completa de cloud computing
 
-| Metrica | Valor |
-|---------|-------|
-| Archivos | 8 |
-| Carpetas | 4 |
-| Tags | finanzas, inversiones, presupuesto |
+| Categoria | Archivos | Descripcion |
+|-----------|----------|-------------|
+| Core Services | 8 | EC2, S3, Lambda, RDS, DynamoDB, VPC, IAM, Beanstalk |
+| Almacenamiento | 4 | S3 Classes, EBS, EFS, Glacier |
+| Bases de Datos | 6 | Aurora, ElastiCache, Redshift, Neptune, DocumentDB, Timestream |
+| Contenedores | 4 | ECS, EKS, Fargate, ECR |
+| Serverless | 6 | API Gateway, Step Functions, EventBridge, SQS, SNS, Kinesis |
+| General | 1 | Que es AWS |
+| Networking | 2 | CloudFront, Route 53 |
+| Guia Principal | 1 | Guia completa AWS |
 
-**Ruta:** `Vaults/Finanzas-Vault`
+#### Otras Areas
+| Carpeta | Estado |
+|---------|--------|
+| Finanzas Personales | Vacia |
+| Salud y Bienestar | Vacia |
+| Trabajo - Profesion | Pendiente |
 
-### Salud-Vault
-> [!tip] Fitness, Nutrición, Salud Mental, Médico
-> Vault con 10 archivos en 4 categorias.
+---
 
-| Metrica | Valor |
-|---------|-------|
-| Archivos | 10 |
-| Carpetas | 4 |
-| Tags | fitness, nutricion, salud, meditacion |
+### 03 Conexiones - MOCs
+> [!tip] Mapas de conocimiento
+> 5 archivos - Indices y conexiones.
 
-**Ruta:** `Vaults/Salud-Vault`
+| Archivo | Descripcion |
+|---------|-------------|
+| 030 INDICE GENERAL (Home) | Hub principal |
+| MOC AWS | Mapa de conocimiento AWS |
+| MOC Desarrollo Personal | Conexiones personales |
+| MOC Productividad | Conexiones productividad |
+| MOC Tecnologia | Conexiones tech |
 
-### Productividad-Vault
-> [!tip] GTD, Herramientas, Templates, System
-> Vault con 12 archivos en 4 categorias.
+---
 
-| Metrica | Valor |
-|---------|-------|
-| Archivos | 12 |
-| Carpetas | 4 |
-| Tags | productividad, gtd, obsidian, zettelkasten |
+### 04 Extracciones AI
+> [!tip] Logs y destilados
+> 2 carpetas - Ambas vacias.
 
-**Ruta:** `Vaults/Productividad-Vault`
+| Carpeta | Estado |
+|---------|--------|
+| Destilados PACE | Vacia |
+| Logs Brutos | Vacia |
+
+---
+
+### 05 Archivo
+> [!tip] Contenido historico
+> 3 items - Archivo y referencias.
+
+| Archivo | Descripcion |
+|---------|-------------|
+| GitHub-Issues | Registro de issues |
+| Indice-Vaults-Anterior | Indice anterior |
+| Proyectos Terminados 2025 | Carpeta vacia |
+
+---
+
+### 99 Sistema
+> [!tip] Configuracion
+> 4 items - Plantillas y metadatos.
+
+| Archivo | Descripcion |
+|---------|-------------|
+| Glossary-Universal | Glosario unificado |
+| Meta-Analysis | Analisis cruzado |
+| Plantillas | Templates |
+| Archivos Adjuntos | Assets |
 
 ---
 
@@ -105,47 +147,22 @@ updated: 2026-06-11 02:52
 
 ### Por Tema
 
-```mermaid
-mindmap
-  root((Second Brain))
-    DevOps-Vault
-      01-Docker
-      02-CI-CD
-      03-Kubernetes
-      04-Monitoring
-    Branding-Vault
-      01-Identidad
-      02-Plantillas
-      03-Contenido
-      04-Campanas
-    Learning-Vault
-      01-Cursos
-      02-Tutoriales
-      03-Recursos
-      04-Certificaciones
-    Finanzas-Vault
-      01-Presupuestos
-      02-Inversiones
-      03-Ahorro
-      04-Impuestos
-    Salud-Vault
-      01-Fitness
-      02-Nutricion
-      03-Salud-Mental
-      04-Medico
-    Productividad-Vault
-      01-GTD
-      02-Herramientas
-      03-Templates
-      04-System
-```
+| Seccion | Contenido Principal |
+|---------|---------------------|
+| 00 Inbox | Nota rapida del dia |
+| 01 Proyectos | Activos, En Pausa |
+| 02 Areas | LinkedIn (67), AWS (32) |
+| 03 Conexiones | MOC AWS, MOC Tech, MOC Productividad |
+| 04 Extracciones | Destilados, Logs Brutos |
+| 05 Archivo | GitHub Issues, Vaults Anterior |
+| 99 Sistema | Plantillas, Glossary, Meta-Analysis |
 
 ---
 
 ## Auto-Update
 
 > [!info] Script de sincronizacion
-> El script `scripts/update-index.ps1` escanea `D:\vaults` y actualiza este dashboard automaticamente.
+> El script `scripts/update-index.ps1` escanea la estructura PACE y actualiza este dashboard automaticamente.
 
 ```powershell
 # Ejecutar manualmente
@@ -154,15 +171,9 @@ mindmap
 
 ---
 
-## Ultima Actualizacion
-
-> [!warning] Auto-sync
-> Este archivo se regenera automaticamente.
-
----
-
 ## Referencias
 
-- [[Index]] - Indice detallado de cada vault
-- [[Cross-Links]] - Conexiones entre vaults
-- [[Meta-Analysis]] - Analisis cruzado
+- [[030 ÍNDICE GENERAL (Home)]] - Hub principal
+- [[MOC Desarrollo Personal]] - Desarrollo personal
+- [[MOC Productividad]] - Productividad
+- [[MOC Tecnología]] - Tecnologia

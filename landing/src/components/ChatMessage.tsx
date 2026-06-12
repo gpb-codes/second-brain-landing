@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { ChatMessage as ChatMessageType } from "./chatbot-data";
 
 interface ChatMessageProps {
@@ -9,17 +10,19 @@ function parseMarkdown(text: string): string {
     .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
     .replace(/\*(.*?)\*/g, '<em class="text-slate-300">$1</em>')
     .replace(/`(.*?)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-700/80 text-emerald-400 text-xs font-mono">$1</code>')
-    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre class="mt-2 p-3 rounded-lg bg-slate-900/80 border border-slate-700/50 overflow-x-auto"><code class="text-xs text-slate-300 font-mono">$2</code></pre>')
+    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre class="mt-2 p-3 rounded-lg bg-slate-900/80 border border-slate-700/50 overflow-x-auto group/code relative"><button class="absolute top-2 right-2 p-1 rounded bg-slate-700/50 text-slate-400 hover:text-white hover:bg-slate-600/50 opacity-0 group-hover/code:opacity-100 transition-all" onclick="navigator.clipboard.writeText(this.nextElementSibling.textContent)"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button><code class="text-xs text-slate-300 font-mono">$2</code></pre>')
     .replace(/\n/g, '<br/>');
 }
 
 export default function ChatMessage({ message }: ChatMessageProps) {
+  const [isExpanded, setIsExpanded] = useState(true);
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
-    <div className={`flex ${message.isUser ? "justify-end" : "justify-start"} mb-3`}>
+    <div className={`flex ${message.isUser ? "justify-end" : "justify-start"} mb-3 animate-in fade-in slide-in-from-bottom-2 duration-200`}>
       <div
         className={`max-w-[85%] rounded-2xl px-4 py-3 ${
           message.isUser

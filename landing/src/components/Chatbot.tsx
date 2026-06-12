@@ -13,6 +13,7 @@ export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [followUpSuggestions, setFollowUpSuggestions] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -21,7 +22,7 @@ export default function Chatbot() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, followUpSuggestions]);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -43,17 +44,21 @@ export default function Chatbot() {
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, userMessage]);
+    setFollowUpSuggestions([]);
 
     setIsTyping(true);
     setTimeout(() => {
-      const response = findResponse(text);
+      const result = findResponse(text);
       const botMessage: ChatMessageType = {
         id: `bot-${Date.now()}`,
-        text: response,
+        text: result.text,
         isUser: false,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botMessage]);
+      if (result.followUp && result.followUp.length > 0) {
+        setFollowUpSuggestions(result.followUp);
+      }
       setIsTyping(false);
     }, 600);
   };
@@ -136,6 +141,22 @@ export default function Chatbot() {
                 </div>
               </div>
             )}
+
+            {/* Follow-up Suggestions */}
+            {!isTyping && followUpSuggestions.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {followUpSuggestions.map((suggestion, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleSend(suggestion)}
+                    className="px-3 py-1.5 text-xs rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 hover:bg-violet-500/20 transition-all duration-200 cursor-pointer"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
 

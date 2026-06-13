@@ -3,7 +3,7 @@ title: "Índice General - Second Brain PACE"
 aliases: [home, indice, dashboard, hub, inicio]
 tags: [second-brain, home, pace, dashboard]
 created: 2026-06-09
-updated: 2026-06-12 04:38
+updated: 2026-06-13 04:17
 ---
 
 # Índice General - Second Brain PACE
